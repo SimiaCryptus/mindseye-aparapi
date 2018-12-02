@@ -1,0 +1,71 @@
+<!--
+  ~ Copyright (c) 2018 by Andrew Charneski.
+  ~
+  ~ The author licenses this file to you under the
+  ~ Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy
+  ~ of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<project name="MindsEye">
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.6</version>
+    </skin>
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <sideBarEnabled>false</sideBarEnabled>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+            <gitHub>
+                <projectId>SimiaCryptus/MindsEye</projectId>
+                <ribbonOrientation>left</ribbonOrientation>
+                <ribbonColor>black</ribbonColor>
+            </gitHub>
+            <profile>release</profile>
+        </fluidoSkin>
+    </custom>
+    <body>
+        <menu ref="reports"/>
+        <menu name="Documentation">
+            <item name="Components" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
+            <item name="Optimizers" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
+            <item name="Training" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
+            <item name="Datasets" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
+            <item name="Models" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
+        </menu>
+        <menu name="Simia Cryptus" position="right">
+            <item name="Blog" href="http://simiacryptus.com"/>
+            <item name="GitHub" href="https://github.com/SimiaCryptus/"/>
+            <item name="Modules" href="https://simiacryptus.github.io/utilities/all"/>
+            <item name="Maven" href="https://mvnrepository.com/artifact/com.simiacryptus"/>
+        </menu>
+
+        <footer><![CDATA[
+    	<p>Search <a href="http://simiacryptus.com">SimiaCryptus Software</a>:</p>
+    	<script>
+  (function() {
+    var cx = '002356377723513062632:sj7pd32nzsk';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>]]></footer>
+
+    </body>
+</project>
