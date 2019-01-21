@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2018 by Andrew Charneski.
+  ~ Copyright (c) 2019 by Andrew Charneski.
   ~
   ~ The author licenses this file to you under the
   ~ Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.simiacryptus</groupId>
         <artifactId>java-parent</artifactId>
-        <version>1.5.1</version>
+        <version>1.6.0</version>
         <relativePath>../java-parent</relativePath>
     </parent>
 
@@ -64,12 +64,12 @@
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>mindseye-java</artifactId>
-            <version>1.5.1</version>
+            <version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>mindseye-test</artifactId>
-            <version>1.5.1</version>
+            <version>1.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -102,12 +102,12 @@
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>java-util</artifactId>
-            <version>1.5.1</version>
+            <version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>mindseye-core</artifactId>
-            <version>1.5.1</version>
+            <version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>com.aparapi</groupId>
@@ -117,7 +117,7 @@
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>java-analysis</artifactId>
-            <version>1.5.1</version>
+            <version>1.6.0</version>
             <optional>true</optional>
         </dependency>
         <dependency>
