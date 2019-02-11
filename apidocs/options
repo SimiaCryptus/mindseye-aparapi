@@ -1,0 +1,30 @@
+-classpath
+'C:/Users/andre/.m2/repository/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar;C:/Users/andre/.m2/repository/org/apache/bcel/bcel/6.2/bcel-6.2.jar;H:/SimiaCryptus/data-science-tools/mindseye-core/target/mindseye-core-1.6.1.jar;C:/Users/andre/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar;C:/Users/andre/.m2/repository/org/slf4j/log4j-over-slf4j/1.8.0-beta2/log4j-over-slf4j-1.8.0-beta2.jar;C:/Users/andre/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar;C:/Users/andre/.m2/repository/com/esotericsoftware/kryo/5.0.0-RC2/kryo-5.0.0-RC2.jar;C:/Users/andre/.m2/repository/org/objenesis/objenesis/2.6/objenesis-2.6.jar;C:/Users/andre/.m2/repository/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar;C:/Users/andre/.m2/repository/com/esotericsoftware/minlog/1.3.1/minlog-1.3.1.jar;C:/Users/andre/.m2/repository/com/simiacryptus/java-util/1.6.1/java-util-1.6.1.jar;C:/Users/andre/.m2/repository/org/json/json/20180813/json-20180813.jar;C:/Users/andre/.m2/repository/org/jblas/jblas/1.2.4/jblas-1.2.4.jar;C:/Users/andre/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.8/jackson-annotations-2.9.8.jar;C:/Users/andre/.m2/repository/com/aparapi/aparapi/1.10.0/aparapi-1.10.0.jar;C:/Users/andre/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;C:/Users/andre/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar;C:/Users/andre/.m2/repository/org/slf4j/slf4j-api/1.8.0-beta2/slf4j-api-1.8.0-beta2.jar;C:/Users/andre/.m2/repository/de/javakaffee/kryo-serializers/0.45/kryo-serializers-0.45.jar;C:/Users/andre/.m2/repository/com/google/guava/guava/27.0.1-jre/guava-27.0.1-jre.jar;C:/Users/andre/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.8/jackson-core-2.9.8.jar;C:/Users/andre/.m2/repository/org/slf4j/jul-to-slf4j/1.8.0-beta2/jul-to-slf4j-1.8.0-beta2.jar;C:/Users/andre/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar;C:/Users/andre/.m2/repository/com/aparapi/aparapi-jni/1.4.1/aparapi-jni-1.4.1.jar;H:/SimiaCryptus/data-science-tools/mindseye-java/target/mindseye-java-1.6.1.jar;C:/Users/andre/.m2/repository/org/scala-lang/scala-library/2.12.6/scala-library-2.12.6.jar;C:/Users/andre/.m2/repository/com/esotericsoftware/reflectasm/1.11.8/reflectasm-1.11.8.jar;C:/Users/andre/.m2/repository/ch/qos/logback/logback-core/1.3.0-alpha4/logback-core-1.3.0-alpha4.jar;C:/Users/andre/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.8/jackson-databind-2.9.8.jar;C:/Users/andre/.m2/repository/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar;C:/Users/andre/.m2/repository/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0.jar;C:/Users/andre/.m2/repository/org/slf4j/jcl-over-slf4j/1.8.0-beta2/jcl-over-slf4j-1.8.0-beta2.jar;C:/Users/andre/.m2/repository/ch/qos/logback/logback-classic/1.3.0-alpha4/logback-classic-1.3.0-alpha4.jar;C:/Users/andre/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'H:/SimiaCryptus/data-science-tools/mindseye-aparapi/src/main/java;H:/SimiaCryptus/data-science-tools/mindseye-aparapi/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2019 <a href="https://simiacryptus.com">SimiaCryptus Software</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'H:/SimiaCryptus/data-science-tools/mindseye-aparapi/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'mindseye-aparapi 1.6.1 API'
+-linkoffline
+'http://docs.oracle.com/javase/8/docs/api' 'H:/SimiaCryptus/data-science-tools/mindseye-aparapi/target/javadoc-bundle-options'
+-linkoffline
+'https://simiacryptus.github.io/mindseye-core/apidocs' 'H:/SimiaCryptus/data-science-tools/mindseye-core/target/site/apidocs'
+-linkoffline
+'https://simiacryptus.github.io/mindseye/apidocs' 'H:/SimiaCryptus/data-science-tools/mindseye-test/target/site/apidocs'
+-linkoffline
+'https://simiacryptus.github.io/mindseye-java/apidocs' 'H:/SimiaCryptus/data-science-tools/mindseye-java/target/site/apidocs'
+-use
+-version
+-windowtitle
+'mindseye-aparapi 1.6.1 API'
