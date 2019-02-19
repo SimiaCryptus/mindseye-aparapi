@@ -21,9 +21,11 @@ package com.simiacryptus.mindseye.layers.aparapi;
 
 import com.aparapi.Kernel;
 import com.aparapi.device.Device;
+import com.aparapi.internal.kernel.KernelManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.LinkedHashSet;
 
 /**
  * The type Convolve kernel.
@@ -82,7 +84,10 @@ public final class ConvolveKernel extends Kernel {
     assert null != kernelSize;
     assert null != weights;
     assert kernelSize[0] * kernelSize[1] * kernelSize[2] == weights.length;
-    execute(device.createRange(output.length));
+    LinkedHashSet<Device> devices = new LinkedHashSet<>();
+    devices.add(device);
+    KernelManager.instance().setPreferredDevices(this, devices);
+    execute(device.createRange(output.length, 1));
   }
 
   @Override

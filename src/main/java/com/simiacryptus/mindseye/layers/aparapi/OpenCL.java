@@ -37,4 +37,5 @@ public final class OpenCL {
       return KernelManager.instance().bestDevice();
     }
   };
+
 }

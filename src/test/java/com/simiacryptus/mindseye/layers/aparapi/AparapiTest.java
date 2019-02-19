@@ -24,6 +24,7 @@ import com.aparapi.Kernel.EXECUTION_MODE;
 import com.aparapi.Range;
 import com.aparapi.device.Device;
 import com.aparapi.device.OpenCLDevice;
+import com.aparapi.internal.kernel.KernelManager;
 import com.aparapi.internal.opencl.OpenCLPlatform;
 import com.aparapi.opencl.OpenCL;
 import com.aparapi.opencl.OpenCL.Resource;
@@ -56,12 +57,8 @@ public class AparapiTest {
     super();
   }
 
-  /**
-   * Main.
-   *
-   * @param _args the args
-   */
-  public static void main(final CharSequence[] _args) {
+  @Test
+  public void main() {
     log.info("com.amd.aparapi.sample.info.Main");
     final List<OpenCLPlatform> platforms = new OpenCLPlatform().getOpenCLPlatforms();
     log.info("Machine contains " + platforms.size() + " OpenCL platforms");
@@ -89,7 +86,7 @@ public class AparapiTest {
       platformc++;
     }
 
-    final Device bestDevice = Device.best();
+    final Device bestDevice = KernelManager.instance().bestDevice();
     if (bestDevice == null) {
       log.info("OpenCLDevice.best() returned null!");
     } else {
@@ -103,83 +100,13 @@ public class AparapiTest {
       log.info("}");
     }
 
-    final Device firstCPU = Device.firstCPU();
-    if (firstCPU == null) {
-      log.info("OpenCLDevice.firstCPU() returned null!");
-    } else {
-      log.info("OpenCLDevice.firstCPU() returned { ");
-      log.info("   Type                  : " + firstCPU.getType());
-      log.info("   GlobalMemSize         : " + ((OpenCLDevice) firstCPU).getGlobalMemSize());
-      log.info("   LocalMemSize          : " + ((OpenCLDevice) firstCPU).getLocalMemSize());
-      log.info("   MaxComputeUnits       : " + ((OpenCLDevice) firstCPU).getMaxComputeUnits());
-      log.info("   MaxWorkGroupSizes     : " + firstCPU.getMaxWorkGroupSize());
-      log.info("   MaxWorkItemDimensions : " + firstCPU.getMaxWorkItemDimensions());
-      log.info("}");
-    }
-
-    final Device firstGPU = Device.firstGPU();
-    if (firstGPU == null) {
-      log.info("OpenCLDevice.firstGPU() returned null!");
-    } else {
-      log.info("OpenCLDevice.firstGPU() returned { ");
-      log.info("   Type                  : " + firstGPU.getType());
-      log.info("   GlobalMemSize         : " + ((OpenCLDevice) firstGPU).getGlobalMemSize());
-      log.info("   LocalMemSize          : " + ((OpenCLDevice) firstGPU).getLocalMemSize());
-      log.info("   MaxComputeUnits       : " + ((OpenCLDevice) firstGPU).getMaxComputeUnits());
-      log.info("   MaxWorkGroupSizes     : " + firstGPU.getMaxWorkGroupSize());
-      log.info("   MaxWorkItemDimensions : " + firstGPU.getMaxWorkItemDimensions());
-      log.info("}");
-    }
-
-    final Device bestGPU = Device.bestGPU();
-    if (bestGPU == null) {
-      log.info("OpenCLDevice.bestGPU() returned null!");
-    } else {
-      log.info("OpenCLDevice.bestGPU() returned { ");
-      log.info("   Type                  : " + bestGPU.getType());
-      log.info("   GlobalMemSize         : " + ((OpenCLDevice) bestGPU).getGlobalMemSize());
-      log.info("   LocalMemSize          : " + ((OpenCLDevice) bestGPU).getLocalMemSize());
-      log.info("   MaxComputeUnits       : " + ((OpenCLDevice) bestGPU).getMaxComputeUnits());
-      log.info("   MaxWorkGroupSizes     : " + bestGPU.getMaxWorkGroupSize());
-      log.info("   MaxWorkItemDimensions : " + bestGPU.getMaxWorkItemDimensions());
-      log.info("}");
-    }
-
-    final Device firstACC = Device.bestACC();
-    if (firstACC == null) {
-      log.info("OpenCLDevice.firstACC() returned null!");
-    } else {
-      log.info("OpenCLDevice.firstACC() returned { ");
-      log.info("   Type                  : " + firstACC.getType());
-      log.info("   GlobalMemSize         : " + ((OpenCLDevice) firstACC).getGlobalMemSize());
-      log.info("   LocalMemSize          : " + ((OpenCLDevice) firstACC).getLocalMemSize());
-      log.info("   MaxComputeUnits       : " + ((OpenCLDevice) firstACC).getMaxComputeUnits());
-      log.info("   MaxWorkGroupSizes     : " + firstACC.getMaxWorkGroupSize());
-      log.info("   MaxWorkItemDimensions : " + firstACC.getMaxWorkItemDimensions());
-      log.info("}");
-    }
-
-    final Device bestACC = Device.bestACC();
-    if (bestACC == null) {
-      log.info("OpenCLDevice.bestACC() returned null!");
-    } else {
-      log.info("OpenCLDevice.bestACC() returned { ");
-      log.info("   Type                  : " + bestACC.getType());
-      log.info("   GlobalMemSize         : " + ((OpenCLDevice) bestACC).getGlobalMemSize());
-      log.info("   LocalMemSize          : " + ((OpenCLDevice) bestACC).getLocalMemSize());
-      log.info("   MaxComputeUnits       : " + ((OpenCLDevice) bestACC).getMaxComputeUnits());
-      log.info("   MaxWorkGroupSizes     : " + bestACC.getMaxWorkGroupSize());
-      log.info("   MaxWorkItemDimensions : " + bestACC.getMaxWorkItemDimensions());
-      log.info("}");
-    }
-
   }
 
   /**
    * Test 1.
    */
   @Test
-  @Ignore
+  //@Ignore
   public void test1() {
 
     @Nonnull final OpenCLDevice openclDevice = (OpenCLDevice) Device.best();
@@ -221,36 +148,36 @@ public class AparapiTest {
     kernel.execute(range);
   }
 
-  /**
-   * The interface Convolution.
-   */
-  @Resource("com/amd/aparapi/sample/convolution/convolution.cl")
-  interface Convolution extends com.aparapi.opencl.OpenCL<AparapiTest.Convolution> {
-    /**
-     * Apply convolution aparapi apply . convolution.
-     *
-     * @param range          the range
-     * @param _convMatrix3x3 the conv matrix 3 x 3
-     * @param _imageIn       the png in
-     * @param _imageOut      the png out
-     * @param _width         the width
-     * @param _height        the height
-     * @return the aparapi apply . convolution
-     */
-    @Nonnull
-    AparapiTest.Convolution applyConvolution(//
-                                             Range range, //
-                                             @OpenCL.GlobalReadOnly("_convMatrix3x3") float[] _convMatrix3x3, //// only read
-                                             //// from
-                                             //// filter
-                                             @OpenCL.GlobalReadOnly("_imagIn") byte[] _imageIn, // only read from filter
-                                             // (actually char[])
-                                             @OpenCL.GlobalWriteOnly("_imagOut") byte[] _imageOut, // only written to (never
-                                             // read) from filter
-                                             // (actually char[])
-                                             @OpenCL.Arg("_width") int _width, //
-                                             @OpenCL.Arg("_height") int _height);
-  }
+//  /**
+//   * The interface Convolution.
+//   */
+//  @Resource("com/amd/aparapi/sample/convolution/convolution.cl")
+//  interface Convolution extends com.aparapi.opencl.OpenCL<AparapiTest.Convolution> {
+//    /**
+//     * Apply convolution aparapi apply . convolution.
+//     *
+//     * @param range          the range
+//     * @param _convMatrix3x3 the conv matrix 3 x 3
+//     * @param _imageIn       the png in
+//     * @param _imageOut      the png out
+//     * @param _width         the width
+//     * @param _height        the height
+//     * @return the aparapi apply . convolution
+//     */
+//    @Nonnull
+//    AparapiTest.Convolution applyConvolution(//
+//                                             Range range, //
+//                                             @OpenCL.GlobalReadOnly("_convMatrix3x3") float[] _convMatrix3x3, //// only read
+//                                             //// from
+//                                             //// filter
+//                                             @OpenCL.GlobalReadOnly("_imagIn") byte[] _imageIn, // only read from filter
+//                                             // (actually char[])
+//                                             @OpenCL.GlobalWriteOnly("_imagOut") byte[] _imageOut, // only written to (never
+//                                             // read) from filter
+//                                             // (actually char[])
+//                                             @OpenCL.Arg("_width") int _width, //
+//                                             @OpenCL.Arg("_height") int _height);
+//  }
 
   /**
    * The type Test kernel.

@@ -2,9 +2,6 @@
   "com.simiacryptus.mindseye.layers.aparapi.AparapiTest" : {
     ":class" : "The type Aparapi apply."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest.Convolution" : {
-    ":class" : "The interface Convolution."
-  },
   "com.simiacryptus.mindseye.layers.aparapi.AparapiTest.TestKernel" : {
     ":class" : "The type Test kernel."
   },
