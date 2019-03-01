@@ -228,6 +228,7 @@ public class ConvolutionLayer extends LayerBase {
         @Nonnull TensorArray tensorArray = TensorArray.wrap(inputBufferTensors);
         input.accumulate(buffer, tensorArray);
       }
+      error.freeRef();
     }) {
 
       @Override

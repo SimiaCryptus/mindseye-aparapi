@@ -87,7 +87,7 @@
         <appender-ref ref="FILE_MEMIO"/>
     </logger>
 
-    <logger name="com.simiacryptus.mindseye.lang.ReferenceCountingBase" level="debug" additivity="false">
+    <logger name="com.simiacryptus.lang.ref.ReferenceCountingBase" level="debug" additivity="false">
         <appender-ref ref="FILE_MEM"/>
     </logger>
 
