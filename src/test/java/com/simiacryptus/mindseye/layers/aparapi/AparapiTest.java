@@ -148,37 +148,6 @@ public class AparapiTest {
     kernel.execute(range);
   }
 
-//  /**
-//   * The interface Convolution.
-//   */
-//  @Resource("com/amd/aparapi/sample/convolution/convolution.cl")
-//  interface Convolution extends com.aparapi.opencl.OpenCL<AparapiTest.Convolution> {
-//    /**
-//     * Apply convolution aparapi apply . convolution.
-//     *
-//     * @param range          the range
-//     * @param _convMatrix3x3 the conv matrix 3 x 3
-//     * @param _imageIn       the png in
-//     * @param _imageOut      the png out
-//     * @param _width         the width
-//     * @param _height        the height
-//     * @return the aparapi apply . convolution
-//     */
-//    @Nonnull
-//    AparapiTest.Convolution applyConvolution(//
-//                                             Range range, //
-//                                             @OpenCL.GlobalReadOnly("_convMatrix3x3") float[] _convMatrix3x3, //// only read
-//                                             //// from
-//                                             //// filter
-//                                             @OpenCL.GlobalReadOnly("_imagIn") byte[] _imageIn, // only read from filter
-//                                             // (actually char[])
-//                                             @OpenCL.GlobalWriteOnly("_imagOut") byte[] _imageOut, // only written to (never
-//                                             // read) from filter
-//                                             // (actually char[])
-//                                             @OpenCL.Arg("_width") int _width, //
-//                                             @OpenCL.Arg("_height") int _height);
-//  }
-
   /**
    * The type Test kernel.
    */
