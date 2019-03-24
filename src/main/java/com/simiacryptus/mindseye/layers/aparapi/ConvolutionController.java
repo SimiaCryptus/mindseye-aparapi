@@ -19,8 +19,8 @@
 
 package com.simiacryptus.mindseye.layers.aparapi;
 
-import com.simiacryptus.mindseye.lang.ComponentException;
 import com.simiacryptus.lang.ref.RecycleBin;
+import com.simiacryptus.mindseye.lang.ComponentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

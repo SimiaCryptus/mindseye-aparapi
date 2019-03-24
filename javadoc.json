@@ -1,66 +1,66 @@
 {
-  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest" : {
-    ":class" : "The type Aparapi apply."
+  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest": {
+    ":class": "The type Aparapi apply."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest.TestKernel" : {
-    ":class" : "The type Test kernel."
+  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest.TestKernel": {
+    ":class": "The type Test kernel."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.BackpropKernel" : {
-    ":class" : "The type Backprop kernel.",
-    "input" : "The Input.",
-    "inputSize" : "The Input size.",
-    "kernelOffset" : "The Kernel offset.",
-    "kernelSize" : "The Kernel size.",
-    "output" : "The Output.",
-    "outputSize" : "The Output size.",
-    "weights" : "The Weights."
+  "com.simiacryptus.mindseye.layers.aparapi.BackpropKernel": {
+    ":class": "The type Backprop kernel.",
+    "input": "The Input.",
+    "inputSize": "The Input size.",
+    "kernelOffset": "The Kernel offset.",
+    "kernelSize": "The Kernel size.",
+    "output": "The Output.",
+    "outputSize": "The Output size.",
+    "weights": "The Weights."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionController" : {
-    ":class" : "The type Convolution controller.",
-    "paddingX" : "Sets padding x.",
-    "paddingY" : "Sets padding y."
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionController": {
+    ":class": "The type Convolution controller.",
+    "paddingX": "Sets padding x.",
+    "paddingY": "Sets padding y."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayer" : {
-    ":class" : "This convolution key is often used as the reference implementation for other convolution implementation. It uses OpenCL via Aparapi to compile Java into GPU-accellerated kernels. Due to its simple implementation and limitations of Aparapi, it is not as fast as CudaSystem-powered layers.",
-    "paddingX" : "Sets padding x.",
-    "paddingY" : "Sets padding y.",
-    "weights" : "Sets weights."
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayer": {
+    ":class": "This convolution key is often used as the reference implementation for other convolution implementation. It uses OpenCL via Aparapi to compile Java into GPU-accellerated kernels. Due to its simple implementation and limitations of Aparapi, it is not as fast as CudaSystem-powered layers.",
+    "paddingX": "Sets padding x.",
+    "paddingY": "Sets padding y.",
+    "weights": "Sets weights."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest" : {
-    ":class" : "The type Convolution key apply."
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest": {
+    ":class": "The type Convolution key apply."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Basic" : {
-    ":class" : "Basic 3x3 convolution apply 2 color bands"
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Basic": {
+    ":class": "Basic 3x3 convolution apply 2 color bands"
   },
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Downsize" : {
-    ":class" : "Reducing the number of bands (output less data than input)"
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Downsize": {
+    ":class": "Reducing the number of bands (output less data than input)"
   },
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Upsize" : {
-    ":class" : "Increasing the number of bands (output more data than input)"
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Upsize": {
+    ":class": "Increasing the number of bands (output more data than input)"
   },
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolveKernel" : {
-    ":class" : "The type Convolve kernel.",
-    "input" : "The Input.",
-    "inputSize" : "The Input size.",
-    "kernelOffset" : "The Kernel offset.",
-    "kernelSize" : "The Kernel size.",
-    "output" : "The Output.",
-    "outputSize" : "The Output size.",
-    "weights" : "The Weights."
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolveKernel": {
+    ":class": "The type Convolve kernel.",
+    "input": "The Input.",
+    "inputSize": "The Input size.",
+    "kernelOffset": "The Kernel offset.",
+    "kernelSize": "The Kernel size.",
+    "output": "The Output.",
+    "outputSize": "The Output size.",
+    "weights": "The Weights."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.GradientKernel" : {
-    ":class" : "The type Gradient kernel.",
-    "input" : "The Input.",
-    "inputSize" : "The Input size.",
-    "kernelOffset" : "The Kernel offset.",
-    "kernelSize" : "The Kernel size.",
-    "output" : "The Output.",
-    "outputSize" : "The Output size.",
-    "paralellism" : "The Paralellism.",
-    "weightSize" : "The Weight size.",
-    "weights" : "The Weights."
+  "com.simiacryptus.mindseye.layers.aparapi.GradientKernel": {
+    ":class": "The type Gradient kernel.",
+    "input": "The Input.",
+    "inputSize": "The Input size.",
+    "kernelOffset": "The Kernel offset.",
+    "kernelSize": "The Kernel size.",
+    "output": "The Output.",
+    "outputSize": "The Output size.",
+    "paralellism": "The Paralellism.",
+    "weightSize": "The Weight size.",
+    "weights": "The Weights."
   },
-  "com.simiacryptus.mindseye.layers.aparapi.OpenCL" : {
-    ":class" : "The type Open cl."
+  "com.simiacryptus.mindseye.layers.aparapi.OpenCL": {
+    ":class": "The type Open cl."
   }
 }
