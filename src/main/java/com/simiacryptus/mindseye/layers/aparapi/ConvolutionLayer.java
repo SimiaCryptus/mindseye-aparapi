@@ -249,7 +249,7 @@ public class ConvolutionLayer extends LayerBase {
   @Override
   public JsonObject getJson(Map<CharSequence, byte[]> resources, @Nonnull DataSerializer dataSerializer) {
     @Nonnull final JsonObject json = super.getJsonStub();
-    json.add("filter", kernel.toJson(resources, dataSerializer));
+    json.add("filter", kernel.getJson(resources, dataSerializer));
     JsonElement paddingX = json.get("paddingX");
     if (null != paddingX && paddingX.isJsonPrimitive()) this.setPaddingX((paddingX.getAsInt()));
     JsonElement paddingY = json.get("paddingY");
