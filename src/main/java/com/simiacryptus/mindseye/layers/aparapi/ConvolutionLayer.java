@@ -34,18 +34,10 @@ import java.util.function.DoubleSupplier;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.IntStream;
 
-/**
- * This convolution key is often used as the reference implementation for other convolution implementation. It uses
- * OpenCL via Aparapi to compile Java into GPU-accellerated kernels. Due to its simple implementation and limitations of
- * Aparapi, it is not as fast as CudaSystem-powered layers.
- */
 @SuppressWarnings("serial")
 public class ConvolutionLayer extends LayerBase {
 
 
-  /**
-   * The Kernel.
-   */
   @Nullable
   public final Tensor kernel;
   @Nullable
@@ -54,69 +46,28 @@ public class ConvolutionLayer extends LayerBase {
   private Integer paddingY = null;
 
 
-  /**
-   * Instantiates a new Convolution key.
-   */
   protected ConvolutionLayer() {
     this(null, true);
   }
 
-  /**
-   * Instantiates a new Convolution key.
-   *
-   * @param width  the width
-   * @param height the height
-   * @param bands  the bands
-   */
   public ConvolutionLayer(final int width, final int height, final int bands) {
     this(width, height, bands, true);
   }
 
-  /**
-   * Instantiates a new Convolution key.
-   *
-   * @param width  the width
-   * @param height the height
-   * @param bands  the bands
-   * @param simple the simple
-   */
   public ConvolutionLayer(final int width, final int height, final int bands, final boolean simple) {
     this(new Tensor(width, height, bands), simple);
     assert !simple || 0 == (width - 1) % 2 : "Simple kernels must have odd width";
     assert !simple || 0 == (height - 1) % 2 : "Simple kernels must have odd height";
   }
 
-  /**
-   * Instantiates a new Convolution key.
-   *
-   * @param width       the width
-   * @param height      the height
-   * @param inputBands  the input bands
-   * @param outputBands the output bands
-   */
   public ConvolutionLayer(final int width, final int height, final int inputBands, final int outputBands) {
     this(width, height, inputBands * outputBands);
   }
 
-  /**
-   * Instantiates a new Convolution key.
-   *
-   * @param width       the width
-   * @param height      the height
-   * @param inputBands  the input bands
-   * @param outputBands the output bands
-   * @param simple      the simple
-   */
   public ConvolutionLayer(final int width, final int height, final int inputBands, final int outputBands, final boolean simple) {
     this(width, height, inputBands * outputBands, simple);
   }
 
-  /**
-   * Instantiates a new Convolution key.
-   *
-   * @param json      the json
-   * @param resources the resources
-   */
   protected ConvolutionLayer(@Nonnull final JsonObject json, Map<CharSequence, byte[]> resources) {
     super(json);
     kernel = Tensor.fromJson(json.get("filter"), resources);
@@ -126,12 +77,6 @@ public class ConvolutionLayer extends LayerBase {
     if (null != paddingY && paddingY.isJsonPrimitive()) this.setPaddingY((paddingY.getAsInt()));
   }
 
-  /**
-   * Instantiates a new Convolution key.
-   *
-   * @param kernel the kernel
-   * @param simple the simple
-   */
   protected ConvolutionLayer(@Nonnull final Tensor kernel, final boolean simple) {
     super();
     this.paddingX = simple ? null : 0;
@@ -145,23 +90,10 @@ public class ConvolutionLayer extends LayerBase {
     this.kernel = kernel;
   }
 
-  /**
-   * From json convolution key.
-   *
-   * @param json the json
-   * @param rs   the rs
-   * @return the convolution key
-   */
   public static ConvolutionLayer fromJson(@Nonnull final JsonObject json, Map<CharSequence, byte[]> rs) {
     return new ConvolutionLayer(json, rs);
   }
 
-  /**
-   * Add weights convolution key.
-   *
-   * @param f the f
-   * @return the convolution key
-   */
   @Nonnull
   public ConvolutionLayer addWeights(@Nonnull final DoubleSupplier f) {
     Util.add(f, kernel.getData());
@@ -257,12 +189,6 @@ public class ConvolutionLayer extends LayerBase {
     return json;
   }
 
-  /**
-   * Sets weights.
-   *
-   * @param f the f
-   * @return the weights
-   */
   @Nonnull
   public ConvolutionLayer setWeights(@Nonnull final DoubleSupplier f) {
     kernel.coordStream(true).forEach(c -> {
@@ -271,12 +197,6 @@ public class ConvolutionLayer extends LayerBase {
     return this;
   }
 
-  /**
-   * Sets weights.
-   *
-   * @param f the f
-   * @return the weights
-   */
   @Nonnull
   public ConvolutionLayer setWeights(@Nonnull final ToDoubleFunction<Coordinate> f) {
     kernel.coordStream(true).forEach(c -> {
@@ -291,44 +211,22 @@ public class ConvolutionLayer extends LayerBase {
     return Arrays.asList(kernel.getData());
   }
 
-  /**
-   * Gets padding x.
-   *
-   * @return the padding x
-   */
   @Nullable
   public Integer getPaddingX() {
     return paddingX;
   }
 
-  /**
-   * Sets padding x.
-   *
-   * @param paddingX the padding x
-   * @return the padding x
-   */
   @Nonnull
   public ConvolutionLayer setPaddingX(Integer paddingX) {
     this.paddingX = paddingX;
     return this;
   }
 
-  /**
-   * Gets padding y.
-   *
-   * @return the padding y
-   */
   @Nullable
   public Integer getPaddingY() {
     return paddingY;
   }
 
-  /**
-   * Sets padding y.
-   *
-   * @param paddingY the padding y
-   * @return the padding y
-   */
   @Nonnull
   public ConvolutionLayer setPaddingY(Integer paddingY) {
     this.paddingY = paddingY;

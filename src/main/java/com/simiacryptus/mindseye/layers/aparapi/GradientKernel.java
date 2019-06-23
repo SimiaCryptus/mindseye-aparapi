@@ -27,65 +27,27 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 
-/**
- * The type Gradient kernel.
- */
 public final class GradientKernel extends Kernel {
 
-  /**
-   * The Input.
-   */
   @Nullable
   public double[] input;
-  /**
-   * The Input size.
-   */
   @Nullable
   public int[] inputSize;
-  /**
-   * The Kernel offset.
-   */
   public int[] kernelOffset;
-  /**
-   * The Kernel size.
-   */
   @Nullable
   public int[] kernelSize;
-  /**
-   * The Output.
-   */
   @Nullable
   public double[] output;
-  /**
-   * The Output size.
-   */
   @Nullable
   public int[] outputSize;
-  /**
-   * The Paralellism.
-   */
   public int paralellism;
-  /**
-   * The Weights.
-   */
   @Nullable
   public double[] weights;
-  /**
-   * The Weight size.
-   */
   public int weightSize;
 
-  /**
-   * Instantiates a new Gradient kernel.
-   */
   public GradientKernel() {
   }
 
-  /**
-   * Exe.
-   *
-   * @param device the device
-   */
   public void exe(@Nonnull final Device device) {
     //assert this.outputSize[0] * this.outputSize[1] * this.outputSize[2] == this.output.length;
     //assert this.inputSize[0] * this.inputSize[1] * this.inputSize[2] == this.input.length;

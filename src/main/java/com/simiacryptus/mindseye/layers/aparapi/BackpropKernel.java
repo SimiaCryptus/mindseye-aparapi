@@ -27,57 +27,25 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 
-/**
- * The type Backprop kernel.
- */
 public final class BackpropKernel extends Kernel {
 
-  /**
-   * The Input.
-   */
   @Nullable
   public double[] input;
-  /**
-   * The Input size.
-   */
   @Nullable
   public int[] inputSize;
-  /**
-   * The Kernel offset.
-   */
   public int[] kernelOffset;
-  /**
-   * The Kernel size.
-   */
   @Nullable
   public int[] kernelSize;
-  /**
-   * The Output.
-   */
   @Nullable
   public double[] output;
-  /**
-   * The Output size.
-   */
   @Nullable
   public int[] outputSize;
-  /**
-   * The Weights.
-   */
   @Nullable
   public double[] weights;
 
-  /**
-   * Instantiates a new Backprop kernel.
-   */
   public BackpropKernel() {
   }
 
-  /**
-   * Exe.
-   *
-   * @param device the device
-   */
   public void exe(@Nonnull final Device device) {
     //assert this.outputSize[0] * this.outputSize[1] * this.outputSize[2] == this.output.length;
     //assert this.inputSize[0] * this.inputSize[1] * this.inputSize[2] == this.input.length;
@@ -94,12 +62,6 @@ public final class BackpropKernel extends Kernel {
     input[i] = run(i);
   }
 
-  /**
-   * Run double.
-   *
-   * @param i the
-   * @return the double
-   */
   public final double run(final int i) {
     final int is0 = inputSize[0];
     final int is1 = is0 * inputSize[1];

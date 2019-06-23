@@ -34,22 +34,10 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
-/**
- * The type Aparapi apply.
- */
 public class AparapiTest {
-  /**
-   * The constant randomize.
-   */
   public static final Random random = new Random();
-  /**
-   * The Log.
-   */
   private static final Logger log = LoggerFactory.getLogger(AparapiTest.class);
 
-  /**
-   * Instantiates a new Aparapi apply.
-   */
   public AparapiTest() {
     super();
   }
@@ -99,9 +87,6 @@ public class AparapiTest {
 
   }
 
-  /**
-   * Test 1.
-   */
   @Test
   //@Ignore
   public void test1() {
@@ -121,11 +106,6 @@ public class AparapiTest {
     testKernel.dispose();
   }
 
-  /**
-   * Test 2.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void test2() {
     @Nonnull final float inA[] = new float[1024];
@@ -145,18 +125,9 @@ public class AparapiTest {
     kernel.execute(range);
   }
 
-  /**
-   * The type Test kernel.
-   */
   public static class TestKernel extends Kernel {
 
-    /**
-     * The Input.
-     */
     public final int[] input = new int[10240];
-    /**
-     * The Results.
-     */
     public final int[] results = new int[10240];
 
     @Override

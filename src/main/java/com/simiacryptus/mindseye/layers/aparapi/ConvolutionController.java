@@ -29,9 +29,6 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-/**
- * The type Convolution controller.
- */
 public final class ConvolutionController {
 
   private static final BackpropKernel backpropTask = new BackpropKernel();
@@ -40,9 +37,6 @@ public final class ConvolutionController {
 
   @SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ConvolutionController.class);
-  /**
-   * The constant MAX_BUFFER_SIZE.
-   */
   public static int MAX_BUFFER_SIZE = 256 * 1024 * 1024;
   private final int[] inputSize;
   @Nonnull
@@ -53,14 +47,6 @@ public final class ConvolutionController {
   @Nullable
   private Integer paddingY = null;
 
-  /**
-   * Instantiates a new Convolution controller.
-   *
-   * @param inputSize  the input size
-   * @param kernelSize the kernel size
-   * @param paddingX   the padding x
-   * @param paddingY   the padding y
-   */
   public ConvolutionController(final int[] inputSize, @Nonnull final int[] kernelSize, final Integer paddingX, Integer paddingY) {
     this.inputSize = inputSize;
     this.kernelSize = kernelSize;
@@ -91,13 +77,6 @@ public final class ConvolutionController {
     assert this.inputSize.length == 3;
   }
 
-  /**
-   * Backprop.
-   *
-   * @param input   the input
-   * @param weights the weights
-   * @param output  the output
-   */
   public void backprop(@Nonnull final double[][] input, @Nonnull final double[] weights, @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
@@ -170,13 +149,6 @@ public final class ConvolutionController {
 
   }
 
-  /**
-   * Convolve.
-   *
-   * @param input   the input
-   * @param weights the weights
-   * @param output  the output
-   */
   public void convolve(@Nonnull final double[][] input, @Nonnull final double[] weights, @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
@@ -252,11 +224,6 @@ public final class ConvolutionController {
     });
   }
 
-  /**
-   * Get output dims int [ ].
-   *
-   * @return the int [ ]
-   */
   public int[] getOutputDims() {
     return outputSize;
   }
@@ -302,13 +269,6 @@ public final class ConvolutionController {
     });
   }
 
-  /**
-   * Gradient.
-   *
-   * @param input   the input
-   * @param weights the weights
-   * @param output  the output
-   */
   public void gradient(@Nonnull final double[][] input, @Nonnull final double[] weights, @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
@@ -363,40 +323,20 @@ public final class ConvolutionController {
     return builder.toString();
   }
 
-  /**
-   * Gets padding x.
-   *
-   * @return the padding x
-   */
   @Nullable
   public Integer getPaddingX() {
     return paddingX;
   }
 
-  /**
-   * Sets padding x.
-   *
-   * @param paddingX the padding x
-   */
   public void setPaddingX(Integer paddingX) {
     this.paddingX = paddingX;
   }
 
-  /**
-   * Gets padding y.
-   *
-   * @return the padding y
-   */
   @Nullable
   public Integer getPaddingY() {
     return paddingY;
   }
 
-  /**
-   * Sets padding y.
-   *
-   * @param paddingY the padding y
-   */
   public void setPaddingY(Integer paddingY) {
     this.paddingY = paddingY;
   }

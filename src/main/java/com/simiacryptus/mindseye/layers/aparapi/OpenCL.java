@@ -23,14 +23,8 @@ import com.aparapi.device.Device;
 import com.aparapi.internal.kernel.KernelManager;
 import com.simiacryptus.lang.ResourcePool;
 
-/**
- * The type Open cl.
- */
 public final class OpenCL {
 
-  /**
-   * The constant devicePool.
-   */
   public static final ResourcePool<Device> devicePool = new ResourcePool<Device>(Integer.parseInt(System.getProperty("num_gpus", "1"))) {
     @Override
     public Device create() {

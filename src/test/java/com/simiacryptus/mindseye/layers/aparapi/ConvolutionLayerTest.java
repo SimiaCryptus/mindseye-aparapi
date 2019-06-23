@@ -25,14 +25,8 @@ import com.simiacryptus.mindseye.layers.java.LayerTestBase;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-/**
- * The type Convolution key apply.
- */
 public abstract class ConvolutionLayerTest extends LayerTestBase {
 
-  /**
-   * Basic 3x3 convolution apply 2 color bands
-   */
   public static class Basic extends ConvolutionLayerTest {
 
     private final int inputBands = 1;
@@ -64,9 +58,6 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
   }
 
 
-  /**
-   * Reducing the number of bands (output less data than input)
-   */
   public static class Downsize extends ConvolutionLayerTest {
 
     @Nonnull
@@ -85,9 +76,6 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
 
   }
 
-  /**
-   * Increasing the number of bands (output more data than input)
-   */
   public static class Upsize extends ConvolutionLayerTest {
 
     @Nonnull
