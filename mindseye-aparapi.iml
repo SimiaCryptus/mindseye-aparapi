@@ -170,7 +170,7 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.9" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.9" level="project" />
     <orderEntry type="module" module-name="mindseye-core" />
-    <orderEntry type="module" module-name="refcount-core" />
+    <orderEntry type="library" name="Maven: com.simiacryptus:refcount-core:1.8.1" level="project" />
     <orderEntry type="library" name="Maven: com.aparapi:aparapi:1.10.0" level="project" />
     <orderEntry type="library" name="Maven: com.aparapi:aparapi-jni:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.bcel:bcel:6.2" level="project" />
