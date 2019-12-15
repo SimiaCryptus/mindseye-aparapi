@@ -1,2 +1,2 @@
-/mnt/h/SimiaCryptus/data-science-tools/mindseye-aparapi/src/test/java/com/simiacryptus/mindseye/layers/aparapi/ConvolutionLayerTest.java
-/mnt/h/SimiaCryptus/data-science-tools/mindseye-aparapi/src/test/java/com/simiacryptus/mindseye/layers/aparapi/AparapiTest.java
+/mnt/h/SimiaCryptus/all-projects/mindseye/mindseye-aparapi/src/test/java/com/simiacryptus/mindseye/layers/aparapi/AparapiTest.java
+/mnt/h/SimiaCryptus/all-projects/mindseye/mindseye-aparapi/src/test/java/com/simiacryptus/mindseye/layers/aparapi/ConvolutionLayerTest.java
