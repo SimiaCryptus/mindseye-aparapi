@@ -103,11 +103,8 @@ public class ConvolutionLayer extends LayerBase {
   @Nonnull
   @Override
   public Result eval(@Nonnull final Result... inObj) {
-    Arrays.stream(inObj).forEach(nnResult -> nnResult.addRef());
-
     final Result input = inObj[0];
     final TensorList batch = input.getData();
-    batch.addRef();
     @Nonnull final int[] inputDims = batch.get(0).getDimensions();
     @Nonnull final int[] kernelDims = kernel.getDimensions();
     @Nullable final double[] kernelData = ConvolutionLayer.this.kernel.getData();
