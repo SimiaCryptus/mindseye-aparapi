@@ -19,8 +19,8 @@
 
 package com.simiacryptus.mindseye.layers.aparapi;
 
-import com.simiacryptus.ref.lang.RecycleBin;
 import com.simiacryptus.mindseye.lang.ComponentException;
+import com.simiacryptus.ref.lang.RecycleBin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public final class ConvolutionController {
 
   @SuppressWarnings("unused")
   private static final Logger log = LoggerFactory.getLogger(ConvolutionController.class);
-  public static int MAX_BUFFER_SIZE = 256 * 1024 * 1024;
+  public static final int MAX_BUFFER_SIZE = 256 * 1024 * 1024;
   private final int[] inputSize;
   @Nonnull
   private final int[] kernelSize;
@@ -75,6 +75,28 @@ public final class ConvolutionController {
     assert outputSize.length == 3;
     assert this.kernelSize.length == 3;
     assert this.inputSize.length == 3;
+  }
+
+  public int[] getOutputDims() {
+    return outputSize;
+  }
+
+  @Nullable
+  public Integer getPaddingX() {
+    return paddingX;
+  }
+
+  public void setPaddingX(@org.jetbrains.annotations.Nullable Integer paddingX) {
+    this.paddingX = paddingX;
+  }
+
+  @Nullable
+  public Integer getPaddingY() {
+    return paddingY;
+  }
+
+  public void setPaddingY(@org.jetbrains.annotations.Nullable Integer paddingY) {
+    this.paddingY = paddingY;
   }
 
   public void backprop(@Nonnull final double[][] input, @Nonnull final double[] weights, @Nonnull final double[][] output) {
@@ -224,51 +246,6 @@ public final class ConvolutionController {
     });
   }
 
-  public int[] getOutputDims() {
-    return outputSize;
-  }
-
-  private void gradient(@Nonnull final double[] input, @Nonnull final double[] weights, final int weightSize, @Nonnull final double[] output) {
-    assert 0 < input.length;
-    assert 0 < weights.length;
-    assert 0 < output.length;
-    OpenCL.devicePool.apply(device -> {
-      try {
-        synchronized (ConvolutionController.kernelTask) {
-          ConvolutionController.kernelTask.input = input;
-          ConvolutionController.kernelTask.weights = weights;
-          ConvolutionController.kernelTask.output = output;
-          ConvolutionController.kernelTask.outputSize = outputSize;
-          ConvolutionController.kernelTask.inputSize = inputSize;
-          ConvolutionController.kernelTask.kernelSize = kernelSize;
-          ConvolutionController.kernelTask.weightSize = weightSize;
-          ConvolutionController.kernelTask.paralellism = weights.length / weightSize;
-          ConvolutionController.kernelTask.kernelOffset = new int[]{
-              paddingY == null ? (kernelSize[1] - 1) / 2 : paddingY,
-              paddingX == null ? (kernelSize[0] - 1) / 2 : paddingX
-          };
-          ConvolutionController.kernelTask.setExplicit(true);
-          ConvolutionController.kernelTask.put(ConvolutionController.convolveTask.kernelOffset);
-          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.outputSize);
-          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.inputSize);
-          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.kernelSize);
-          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.input);
-          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.output);
-          ConvolutionController.kernelTask.exe(device);
-          ConvolutionController.kernelTask.get(ConvolutionController.kernelTask.weights);
-          ConvolutionController.kernelTask.input = null;
-          ConvolutionController.kernelTask.weights = null;
-          ConvolutionController.kernelTask.output = null;
-          ConvolutionController.kernelTask.outputSize = null;
-          ConvolutionController.kernelTask.inputSize = null;
-          ConvolutionController.kernelTask.kernelSize = null;
-        }
-      } catch (@Nonnull final Throwable e) {
-        throw new ComponentException("Error apply " + this, e);
-      }
-    });
-  }
-
   public void gradient(@Nonnull final double[][] input, @Nonnull final double[] weights, @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
@@ -323,21 +300,44 @@ public final class ConvolutionController {
     return builder.toString();
   }
 
-  @Nullable
-  public Integer getPaddingX() {
-    return paddingX;
-  }
-
-  public void setPaddingX(Integer paddingX) {
-    this.paddingX = paddingX;
-  }
-
-  @Nullable
-  public Integer getPaddingY() {
-    return paddingY;
-  }
-
-  public void setPaddingY(Integer paddingY) {
-    this.paddingY = paddingY;
+  private void gradient(@Nonnull final double[] input, @Nonnull final double[] weights, final int weightSize, @Nonnull final double[] output) {
+    assert 0 < input.length;
+    assert 0 < weights.length;
+    assert 0 < output.length;
+    OpenCL.devicePool.apply(device -> {
+      try {
+        synchronized (ConvolutionController.kernelTask) {
+          ConvolutionController.kernelTask.input = input;
+          ConvolutionController.kernelTask.weights = weights;
+          ConvolutionController.kernelTask.output = output;
+          ConvolutionController.kernelTask.outputSize = outputSize;
+          ConvolutionController.kernelTask.inputSize = inputSize;
+          ConvolutionController.kernelTask.kernelSize = kernelSize;
+          ConvolutionController.kernelTask.weightSize = weightSize;
+          ConvolutionController.kernelTask.paralellism = weights.length / weightSize;
+          ConvolutionController.kernelTask.kernelOffset = new int[]{
+              paddingY == null ? (kernelSize[1] - 1) / 2 : paddingY,
+              paddingX == null ? (kernelSize[0] - 1) / 2 : paddingX
+          };
+          ConvolutionController.kernelTask.setExplicit(true);
+          ConvolutionController.kernelTask.put(ConvolutionController.convolveTask.kernelOffset);
+          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.outputSize);
+          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.inputSize);
+          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.kernelSize);
+          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.input);
+          ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.output);
+          ConvolutionController.kernelTask.exe(device);
+          ConvolutionController.kernelTask.get(ConvolutionController.kernelTask.weights);
+          ConvolutionController.kernelTask.input = null;
+          ConvolutionController.kernelTask.weights = null;
+          ConvolutionController.kernelTask.output = null;
+          ConvolutionController.kernelTask.outputSize = null;
+          ConvolutionController.kernelTask.inputSize = null;
+          ConvolutionController.kernelTask.kernelSize = null;
+        }
+      } catch (@Nonnull final Throwable e) {
+        throw new ComponentException("Error apply " + this, e);
+      }
+    });
   }
 }
