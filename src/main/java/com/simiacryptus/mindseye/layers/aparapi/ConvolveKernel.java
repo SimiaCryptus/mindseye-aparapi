@@ -27,7 +27,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 
-public final @com.simiacryptus.ref.lang.RefAware class ConvolveKernel extends Kernel {
+public final @com.simiacryptus.ref.lang.RefAware
+class ConvolveKernel extends Kernel {
 
   @Nullable
   public double[] input;

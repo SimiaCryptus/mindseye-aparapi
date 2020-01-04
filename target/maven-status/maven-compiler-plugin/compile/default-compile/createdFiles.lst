@@ -1,8 +1,0 @@
-com/simiacryptus/mindseye/layers/aparapi/GradientKernel.class
-com/simiacryptus/mindseye/layers/aparapi/ConvolveKernel.class
-com/simiacryptus/mindseye/layers/aparapi/OpenCL.class
-com/simiacryptus/mindseye/layers/aparapi/ConvolutionController.class
-com/simiacryptus/mindseye/layers/aparapi/ConvolutionLayer.class
-com/simiacryptus/mindseye/layers/aparapi/BackpropKernel.class
-com/simiacryptus/mindseye/layers/aparapi/ConvolutionLayer$1.class
-com/simiacryptus/mindseye/layers/aparapi/OpenCL$1.class

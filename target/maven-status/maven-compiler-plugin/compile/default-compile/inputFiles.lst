@@ -1,6 +1,0 @@
-/mnt/h/SimiaCryptus/all-projects/mindseye/mindseye-aparapi/src/main/java/com/simiacryptus/mindseye/layers/aparapi/ConvolutionLayer.java
-/mnt/h/SimiaCryptus/all-projects/mindseye/mindseye-aparapi/src/main/java/com/simiacryptus/mindseye/layers/aparapi/GradientKernel.java
-/mnt/h/SimiaCryptus/all-projects/mindseye/mindseye-aparapi/src/main/java/com/simiacryptus/mindseye/layers/aparapi/ConvolutionController.java
-/mnt/h/SimiaCryptus/all-projects/mindseye/mindseye-aparapi/src/main/java/com/simiacryptus/mindseye/layers/aparapi/ConvolveKernel.java
-/mnt/h/SimiaCryptus/all-projects/mindseye/mindseye-aparapi/src/main/java/com/simiacryptus/mindseye/layers/aparapi/BackpropKernel.java
-/mnt/h/SimiaCryptus/all-projects/mindseye/mindseye-aparapi/src/main/java/com/simiacryptus/mindseye/layers/aparapi/OpenCL.java

@@ -23,7 +23,8 @@ import com.aparapi.device.Device;
 import com.aparapi.internal.kernel.KernelManager;
 import com.simiacryptus.lang.ResourcePool;
 
-public final @com.simiacryptus.ref.lang.RefAware class OpenCL {
+public final @com.simiacryptus.ref.lang.RefAware
+class OpenCL {
 
   public static final ResourcePool<Device> devicePool = new ResourcePool<Device>(
       Integer.parseInt(System.getProperty("num_gpus", "1"))) {
