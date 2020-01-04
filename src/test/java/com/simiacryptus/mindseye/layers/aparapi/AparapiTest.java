@@ -33,8 +33,9 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
+import com.simiacryptus.ref.wrappers.RefList;
 
-public class AparapiTest {
+public @com.simiacryptus.ref.lang.RefAware class AparapiTest {
   public static final Random random = new Random();
   private static final Logger log = LoggerFactory.getLogger(AparapiTest.class);
 
@@ -48,7 +49,8 @@ public class AparapiTest {
     final List<OpenCLPlatform> platforms = new OpenCLPlatform().getOpenCLPlatforms();
     log.info("Machine contains " + platforms.size() + " OpenCL platforms");
     int platformc = 0;
-    for (@Nonnull final OpenCLPlatform platform : platforms) {
+    for (@Nonnull
+    final OpenCLPlatform platform : platforms) {
       log.info("Platform " + platformc + "{");
       log.info("   Name    : \"" + platform.getName() + "\"");
       log.info("   Vendor  : \"" + platform.getVendor() + "\"");
@@ -56,7 +58,8 @@ public class AparapiTest {
       final List<OpenCLDevice> devices = platform.getOpenCLDevices();
       log.info("   Platform contains " + devices.size() + " OpenCL devices");
       int devicec = 0;
-      for (@Nonnull final OpenCLDevice device : devices) {
+      for (@Nonnull
+      final OpenCLDevice device : devices) {
         log.info("   Device " + devicec + "{");
         log.info("       Type                  : " + device.getType());
         log.info("       GlobalMemSize         : " + device.getGlobalMemSize());
@@ -91,9 +94,11 @@ public class AparapiTest {
   //@Ignore
   public void test1() {
 
-    @Nonnull final OpenCLDevice openclDevice = (OpenCLDevice) Device.best();
+    @Nonnull
+    final OpenCLDevice openclDevice = (OpenCLDevice) Device.best();
     // final Convolution convolution = openclDevice.bind(Convolution.class);
-    @Nonnull final AparapiTest.TestKernel testKernel = new AparapiTest.TestKernel();
+    @Nonnull
+    final AparapiTest.TestKernel testKernel = new AparapiTest.TestKernel();
     testKernel.setExecutionMode(EXECUTION_MODE.GPU);
     testKernel.setExplicit(true);
     final Range range = openclDevice.createRange3D(100, 100, 8);
@@ -108,12 +113,16 @@ public class AparapiTest {
 
   @Test
   public void test2() {
-    @Nonnull final float inA[] = new float[1024];
-    @Nonnull final float inB[] = new float[1024];
+    @Nonnull
+    final float inA[] = new float[1024];
+    @Nonnull
+    final float inB[] = new float[1024];
     assert inA.length == inB.length;
-    @Nonnull final float[] result = new float[inA.length];
+    @Nonnull
+    final float[] result = new float[inA.length];
 
-    @Nonnull final Kernel kernel = new Kernel() {
+    @Nonnull
+    final Kernel kernel = new Kernel() {
       @Override
       public void run() {
         final int i = getGlobalId();
@@ -121,11 +130,12 @@ public class AparapiTest {
       }
     };
 
-    @Nonnull final Range range = Range.create(result.length);
+    @Nonnull
+    final Range range = Range.create(result.length);
     kernel.execute(range);
   }
 
-  public static class TestKernel extends Kernel {
+  public static @com.simiacryptus.ref.lang.RefAware class TestKernel extends Kernel {
 
     public final int[] input = new int[10240];
     public final int[] results = new int[10240];
@@ -139,6 +149,5 @@ public class AparapiTest {
     }
 
   }
-
 
 }

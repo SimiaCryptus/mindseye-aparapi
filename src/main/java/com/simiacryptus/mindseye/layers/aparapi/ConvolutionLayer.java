@@ -32,9 +32,13 @@ import java.util.UUID;
 import java.util.function.DoubleSupplier;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.IntStream;
+import com.simiacryptus.ref.wrappers.RefArrays;
+import com.simiacryptus.ref.wrappers.RefList;
+import com.simiacryptus.ref.wrappers.RefMap;
+import com.simiacryptus.ref.wrappers.RefIntStream;
 
 @SuppressWarnings("serial")
-public class ConvolutionLayer extends LayerBase {
+public @com.simiacryptus.ref.lang.RefAware class ConvolutionLayer extends LayerBase {
 
   @Nullable
   public final Tensor kernel;
@@ -62,11 +66,12 @@ public class ConvolutionLayer extends LayerBase {
   }
 
   public ConvolutionLayer(final int width, final int height, final int inputBands, final int outputBands,
-                          final boolean simple) {
+      final boolean simple) {
     this(width, height, inputBands * outputBands, simple);
   }
 
-  protected ConvolutionLayer(@Nonnull final JsonObject json, Map<CharSequence, byte[]> resources) {
+  protected ConvolutionLayer(@Nonnull final JsonObject json,
+      com.simiacryptus.ref.wrappers.RefMap<CharSequence, byte[]> resources) {
     super(json);
     kernel = Tensor.fromJson(json.get("filter"), resources);
     JsonElement paddingX = json.get("paddingX");
@@ -84,15 +89,15 @@ public class ConvolutionLayer extends LayerBase {
     @Nonnull
     int[] dimensions = kernel.getDimensions();
     if (dimensions.length != 3)
-      throw new IllegalArgumentException(Arrays.toString(dimensions));
+      throw new IllegalArgumentException(com.simiacryptus.ref.wrappers.RefArrays.toString(dimensions));
     if (dimensions[0] <= 0)
-      throw new IllegalArgumentException(Arrays.toString(dimensions));
+      throw new IllegalArgumentException(com.simiacryptus.ref.wrappers.RefArrays.toString(dimensions));
     if (dimensions[1] <= 0)
-      throw new IllegalArgumentException(Arrays.toString(dimensions));
+      throw new IllegalArgumentException(com.simiacryptus.ref.wrappers.RefArrays.toString(dimensions));
     if (dimensions[2] <= 0)
-      throw new IllegalArgumentException(Arrays.toString(dimensions));
+      throw new IllegalArgumentException(com.simiacryptus.ref.wrappers.RefArrays.toString(dimensions));
     if (dimensions[2] <= 0)
-      throw new IllegalArgumentException(Arrays.toString(dimensions));
+      throw new IllegalArgumentException(com.simiacryptus.ref.wrappers.RefArrays.toString(dimensions));
     this.kernel = kernel;
   }
 
@@ -133,7 +138,8 @@ public class ConvolutionLayer extends LayerBase {
   }
 
   @SuppressWarnings("unused")
-  public static ConvolutionLayer fromJson(@Nonnull final JsonObject json, Map<CharSequence, byte[]> rs) {
+  public static ConvolutionLayer fromJson(@Nonnull final JsonObject json,
+      com.simiacryptus.ref.wrappers.RefMap<CharSequence, byte[]> rs) {
     return new ConvolutionLayer(json, rs);
   }
 
@@ -142,12 +148,16 @@ public class ConvolutionLayer extends LayerBase {
   public Result eval(@Nonnull final Result... inObj) {
     final Result input = inObj[0];
     final TensorList batch = input.getData();
-    @Nonnull final int[] inputDims = batch.get(0).getDimensions();
-    @Nonnull final int[] kernelDims = kernel.getDimensions();
-    @Nullable final double[] kernelData = ConvolutionLayer.this.kernel.getData();
-    @Nonnull final ConvolutionController convolutionController = new ConvolutionController(inputDims, kernelDims, paddingX,
+    @Nonnull
+    final int[] inputDims = batch.get(0).getDimensions();
+    @Nonnull
+    final int[] kernelDims = kernel.getDimensions();
+    @Nullable
+    final double[] kernelData = ConvolutionLayer.this.kernel.getData();
+    @Nonnull
+    final ConvolutionController convolutionController = new ConvolutionController(inputDims, kernelDims, paddingX,
         paddingY);
-    final Tensor[] output = IntStream.range(0, batch.length())
+    final Tensor[] output = com.simiacryptus.ref.wrappers.RefIntStream.range(0, batch.length())
         .mapToObj(dataIndex -> new Tensor(convolutionController.getOutputDims())).toArray(i -> new Tensor[i]);
     try {
       final double[][] inputBuffers = batch.stream().map(x -> {
@@ -156,10 +166,12 @@ public class ConvolutionLayer extends LayerBase {
         x.detach();
         return data;
       }).toArray(i -> new double[i][]);
-      final double[][] outputBuffers = Arrays.stream(output).map(x -> x.getData()).toArray(i -> new double[i][]);
+      final double[][] outputBuffers = com.simiacryptus.ref.wrappers.RefArrays.stream(output).map(x -> x.getData())
+          .toArray(i -> new double[i][]);
       convolutionController.convolve(inputBuffers, kernelData, outputBuffers);
     } catch (@Nonnull final Throwable e) {
-      throw new RuntimeException("Error mapCoords png res " + Arrays.toString(inputDims), e);
+      throw new RuntimeException(
+          "Error mapCoords png res " + com.simiacryptus.ref.wrappers.RefArrays.toString(inputDims), e);
     }
     int outputLength = output.length;
     return new Result(new TensorArray(output),
@@ -171,17 +183,19 @@ public class ConvolutionLayer extends LayerBase {
             final double[][] outputBuffers = error.stream().map(x -> {
               return x.getData();
             }).toArray(i -> new double[i][]);
-            @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
+            @Nonnull
+            final Tensor weightGradient = new Tensor(kernelDims);
             convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
 
             buffer.get(ConvolutionLayer.this.getId(), kernelData).addInPlace(weightGradient.getData());
           }
           if (input.isAlive()) {
-            final Tensor[] inputBufferTensors = IntStream.range(0, outputLength)
+            final Tensor[] inputBufferTensors = com.simiacryptus.ref.wrappers.RefIntStream.range(0, outputLength)
                 .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
-            final double[][] inputBuffers = Arrays.stream(inputBufferTensors).map(x -> {
-              return x.getData();
-            }).toArray(i -> new double[i][]);
+            final double[][] inputBuffers = com.simiacryptus.ref.wrappers.RefArrays.stream(inputBufferTensors)
+                .map(x -> {
+                  return x.getData();
+                }).toArray(i -> new double[i][]);
             final double[][] outputBuffers = error.stream().map(x -> {
               return x.getData();
             }).toArray(i -> new double[i][]);
@@ -197,16 +211,17 @@ public class ConvolutionLayer extends LayerBase {
         return input.isAlive() || !isFrozen();
       }
 
-      @Override
-      protected void _free() {
+      public void _free() {
       }
     };
   }
 
   @Nonnull
   @Override
-  public JsonObject getJson(Map<CharSequence, byte[]> resources, @Nonnull DataSerializer dataSerializer) {
-    @Nonnull final JsonObject json = super.getJsonStub();
+  public JsonObject getJson(com.simiacryptus.ref.wrappers.RefMap<CharSequence, byte[]> resources,
+      @Nonnull DataSerializer dataSerializer) {
+    @Nonnull
+    final JsonObject json = super.getJsonStub();
     json.add("filter", kernel.getJson(resources, dataSerializer));
     JsonElement paddingX = json.get("paddingX");
     if (null != paddingX && paddingX.isJsonPrimitive())
@@ -219,12 +234,29 @@ public class ConvolutionLayer extends LayerBase {
 
   @Nonnull
   @Override
-  public List<double[]> state() {
-    return Arrays.asList(kernel.getData());
+  public com.simiacryptus.ref.wrappers.RefList<double[]> state() {
+    return com.simiacryptus.ref.wrappers.RefArrays.asList(kernel.getData());
   }
 
-  @Override
-  protected void _free() {
+  public void _free() {
     super._free();
+  }
+
+  public @Override @SuppressWarnings("unused") ConvolutionLayer addRef() {
+    return (ConvolutionLayer) super.addRef();
+  }
+
+  public static @SuppressWarnings("unused") ConvolutionLayer[] addRefs(ConvolutionLayer[] array) {
+    if (array == null)
+      return null;
+    return java.util.Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayer::addRef)
+        .toArray((x) -> new ConvolutionLayer[x]);
+  }
+
+  public static @SuppressWarnings("unused") ConvolutionLayer[][] addRefs(ConvolutionLayer[][] array) {
+    if (array == null)
+      return null;
+    return java.util.Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayer::addRefs)
+        .toArray((x) -> new ConvolutionLayer[x][]);
   }
 }

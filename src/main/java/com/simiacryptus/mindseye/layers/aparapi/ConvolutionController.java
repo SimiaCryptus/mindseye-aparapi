@@ -28,8 +28,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.stream.IntStream;
+import com.simiacryptus.ref.wrappers.RefArrays;
+import com.simiacryptus.ref.wrappers.RefIntStream;
 
-public final class ConvolutionController {
+public final @com.simiacryptus.ref.lang.RefAware class ConvolutionController {
 
   private static final BackpropKernel backpropTask = new BackpropKernel();
   private static final ConvolveKernel convolveTask = new ConvolveKernel();
@@ -47,14 +49,16 @@ public final class ConvolutionController {
   @Nullable
   private Integer paddingY = null;
 
-  public ConvolutionController(final int[] inputSize, @Nonnull final int[] kernelSize, final Integer paddingX, Integer paddingY) {
+  public ConvolutionController(final int[] inputSize, @Nonnull final int[] kernelSize, final Integer paddingX,
+      Integer paddingY) {
     this.inputSize = inputSize;
     this.kernelSize = kernelSize;
     this.setPaddingX(paddingX);
     this.setPaddingY(paddingY);
-    outputSize = IntStream.range(0, kernelSize.length).map(i -> {
+    outputSize = com.simiacryptus.ref.wrappers.RefIntStream.range(0, kernelSize.length).map(i -> {
       int x;
-      @Nullable Integer padding;
+      @Nullable
+      Integer padding;
       if (i == 0) {
         padding = paddingX;
       } else if (i == 1) {
@@ -99,7 +103,8 @@ public final class ConvolutionController {
     this.paddingY = paddingY;
   }
 
-  public void backprop(@Nonnull final double[][] input, @Nonnull final double[] weights, @Nonnull final double[][] output) {
+  public void backprop(@Nonnull final double[][] input, @Nonnull final double[] weights,
+      @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
     final int inLength = input[0].length;
@@ -117,22 +122,25 @@ public final class ConvolutionController {
           ConvolutionController.backpropTask.put(ConvolutionController.backpropTask.weights);
           ConvolutionController.backpropTask.kernelSize = kernelSize;
           ConvolutionController.backpropTask.put(ConvolutionController.backpropTask.kernelSize);
-          ConvolutionController.backpropTask.kernelOffset = new int[]{
+          ConvolutionController.backpropTask.kernelOffset = new int[] {
               null == paddingY ? (kernelSize[1] - 1) / 2 : paddingY,
-              null == paddingX ? (kernelSize[0] - 1) / 2 : paddingX
-          };
+              null == paddingX ? (kernelSize[0] - 1) / 2 : paddingX };
           ConvolutionController.backpropTask.put(ConvolutionController.convolveTask.kernelOffset);
-          @Nullable double[] inputBuffer = null;
-          @Nullable double[] outputBuffer = null;
+          @Nullable
+          double[] inputBuffer = null;
+          @Nullable
+          double[] outputBuffer = null;
           for (int run = 0; run < runs; run++) {
             final int currentIndexOffset = run * inputsPerRun;
             final int currentNumItems = run < run - 1 ? inputsPerRun : leftover == 0 ? inputsPerRun : leftover;
             if (null == inputBuffer || inputBuffer.length != inLength * currentNumItems) {
-              if (null != inputBuffer) RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
+              if (null != inputBuffer)
+                RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
               inputBuffer = RecycleBin.DOUBLES.obtain(inLength * currentNumItems);
             }
             if (null == outputBuffer || outputBuffer.length != outLength * currentNumItems) {
-              if (null != outputBuffer) RecycleBin.DOUBLES.recycle(outputBuffer, outputBuffer.length);
+              if (null != outputBuffer)
+                RecycleBin.DOUBLES.recycle(outputBuffer, outputBuffer.length);
               outputBuffer = RecycleBin.DOUBLES.obtain(outLength * currentNumItems);
             }
             for (int i = 0; i < currentNumItems; i++) {
@@ -171,7 +179,8 @@ public final class ConvolutionController {
 
   }
 
-  public void convolve(@Nonnull final double[][] input, @Nonnull final double[] weights, @Nonnull final double[][] output) {
+  public void convolve(@Nonnull final double[][] input, @Nonnull final double[] weights,
+      @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
     final int inLength = input[0].length;
@@ -189,14 +198,15 @@ public final class ConvolutionController {
           ConvolutionController.convolveTask.weights = weights;
           ConvolutionController.convolveTask.put(ConvolutionController.convolveTask.weights);
           ConvolutionController.convolveTask.kernelSize = kernelSize;
-          ConvolutionController.convolveTask.kernelOffset = new int[]{
+          ConvolutionController.convolveTask.kernelOffset = new int[] {
               null == paddingY ? (kernelSize[1] - 1) / 2 : paddingY,
-              null == paddingX ? (kernelSize[0] - 1) / 2 : paddingX
-          };
+              null == paddingX ? (kernelSize[0] - 1) / 2 : paddingX };
           ConvolutionController.convolveTask.put(ConvolutionController.convolveTask.kernelOffset);
           ConvolutionController.convolveTask.put(ConvolutionController.convolveTask.kernelSize);
-          @Nullable double[] inputBuffer = null;
-          @Nullable double[] outputBuffer = null;
+          @Nullable
+          double[] inputBuffer = null;
+          @Nullable
+          double[] outputBuffer = null;
           for (int run = 0; run <= runs; run++) {
             final int currentIndexOffset = run * inputsPerRun;
             final int currentNumItems = run < runs ? inputsPerRun : leftover;
@@ -204,11 +214,13 @@ public final class ConvolutionController {
               continue;
             }
             if (null == inputBuffer || inputBuffer.length != inLength * currentNumItems) {
-              if (null != inputBuffer) RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
+              if (null != inputBuffer)
+                RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
               inputBuffer = RecycleBin.DOUBLES.obtain(inLength * currentNumItems);
             }
             if (null == outputBuffer || outputBuffer.length != outLength * currentNumItems) {
-              if (null != outputBuffer) RecycleBin.DOUBLES.recycle(outputBuffer, outputBuffer.length);
+              if (null != outputBuffer)
+                RecycleBin.DOUBLES.recycle(outputBuffer, outputBuffer.length);
               outputBuffer = RecycleBin.DOUBLES.obtain(outLength * currentNumItems);
             }
             for (int i = 0; i < currentNumItems; i++) {
@@ -246,25 +258,31 @@ public final class ConvolutionController {
     });
   }
 
-  public void gradient(@Nonnull final double[][] input, @Nonnull final double[] weights, @Nonnull final double[][] output) {
+  public void gradient(@Nonnull final double[][] input, @Nonnull final double[] weights,
+      @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
     final int inLength = input[0].length;
     final int outLength = output[0].length;
-    final int inputsPerRun = Math.min(Math.floorDiv(ConvolutionController.MAX_BUFFER_SIZE, Math.max(inLength, outLength)), length);
+    final int inputsPerRun = Math
+        .min(Math.floorDiv(ConvolutionController.MAX_BUFFER_SIZE, Math.max(inLength, outLength)), length);
     final int runs = length / inputsPerRun;
     final int leftover = length - runs * inputsPerRun;
-    @Nullable double[] inputBuffer = null;
-    @Nullable double[] outputBuffer = null;
+    @Nullable
+    double[] inputBuffer = null;
+    @Nullable
+    double[] outputBuffer = null;
     for (int run = 0; run < runs; run++) {
       final int currentIndexOffset = run * inputsPerRun;
       final int currentNumItems = run < run - 1 ? inputsPerRun : leftover == 0 ? inputsPerRun : leftover;
       if (null == inputBuffer || inputBuffer.length != inLength * currentNumItems) {
-        if (null != inputBuffer) RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
+        if (null != inputBuffer)
+          RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
         inputBuffer = RecycleBin.DOUBLES.obtain(inLength * currentNumItems);
       }
       if (null == outputBuffer || outputBuffer.length != outLength * currentNumItems) {
-        if (null != outputBuffer) RecycleBin.DOUBLES.recycle(outputBuffer, outputBuffer.length);
+        if (null != outputBuffer)
+          RecycleBin.DOUBLES.recycle(outputBuffer, outputBuffer.length);
         outputBuffer = RecycleBin.DOUBLES.obtain(outLength * currentNumItems);
       }
       for (int i = 0; i < currentNumItems; i++) {
@@ -276,7 +294,7 @@ public final class ConvolutionController {
       final int parallelism = Math.min(16, inLength);
       final double[] buffer = RecycleBin.DOUBLES.obtain(weights.length * parallelism);
       gradient(inputBuffer, buffer, weights.length, outputBuffer);
-      IntStream.range(0, weights.length).forEach(weightIndex -> {
+      com.simiacryptus.ref.wrappers.RefIntStream.range(0, weights.length).forEach(weightIndex -> {
         for (int i = weightIndex; i < buffer.length; i += weights.length) {
           weights[weightIndex] += buffer[i];
         }
@@ -289,18 +307,20 @@ public final class ConvolutionController {
 
   @Override
   public String toString() {
-    @Nonnull final StringBuilder builder = new StringBuilder();
+    @Nonnull
+    final StringBuilder builder = new StringBuilder();
     builder.append("Convolve [");
-    builder.append(Arrays.toString(inputSize));
+    builder.append(com.simiacryptus.ref.wrappers.RefArrays.toString(inputSize));
     builder.append(" x ");
-    builder.append(Arrays.toString(kernelSize));
+    builder.append(com.simiacryptus.ref.wrappers.RefArrays.toString(kernelSize));
     builder.append(" => ");
-    builder.append(Arrays.toString(outputSize));
+    builder.append(com.simiacryptus.ref.wrappers.RefArrays.toString(outputSize));
     builder.append("]");
     return builder.toString();
   }
 
-  private void gradient(@Nonnull final double[] input, @Nonnull final double[] weights, final int weightSize, @Nonnull final double[] output) {
+  private void gradient(@Nonnull final double[] input, @Nonnull final double[] weights, final int weightSize,
+      @Nonnull final double[] output) {
     assert 0 < input.length;
     assert 0 < weights.length;
     assert 0 < output.length;
@@ -315,10 +335,9 @@ public final class ConvolutionController {
           ConvolutionController.kernelTask.kernelSize = kernelSize;
           ConvolutionController.kernelTask.weightSize = weightSize;
           ConvolutionController.kernelTask.paralellism = weights.length / weightSize;
-          ConvolutionController.kernelTask.kernelOffset = new int[]{
+          ConvolutionController.kernelTask.kernelOffset = new int[] {
               paddingY == null ? (kernelSize[1] - 1) / 2 : paddingY,
-              paddingX == null ? (kernelSize[0] - 1) / 2 : paddingX
-          };
+              paddingX == null ? (kernelSize[0] - 1) / 2 : paddingX };
           ConvolutionController.kernelTask.setExplicit(true);
           ConvolutionController.kernelTask.put(ConvolutionController.convolveTask.kernelOffset);
           ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.outputSize);

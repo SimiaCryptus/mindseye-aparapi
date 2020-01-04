@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 
-public final class GradientKernel extends Kernel {
+public final @com.simiacryptus.ref.lang.RefAware class GradientKernel extends Kernel {
 
   @Nullable
   public double[] input;
@@ -51,7 +51,8 @@ public final class GradientKernel extends Kernel {
   public void exe(@Nonnull final Device device) {
     //assert this.outputSize[0] * this.outputSize[1] * this.outputSize[2] == this.output.length;
     //assert this.inputSize[0] * this.inputSize[1] * this.inputSize[2] == this.input.length;
-    if (null == kernelSize) throw new IllegalStateException();
+    if (null == kernelSize)
+      throw new IllegalStateException();
     assert kernelSize[0] * kernelSize[1] * kernelSize[2] == weightSize;
     LinkedHashSet<Device> devices = new LinkedHashSet<>();
     devices.add(device);
