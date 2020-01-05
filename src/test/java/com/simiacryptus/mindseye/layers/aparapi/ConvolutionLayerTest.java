@@ -21,18 +21,20 @@ package com.simiacryptus.mindseye.layers.aparapi;
 
 import com.simiacryptus.mindseye.lang.Layer;
 import com.simiacryptus.mindseye.layers.java.LayerTestBase;
+import com.simiacryptus.ref.lang.RefAware;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.Random;
 
-public abstract @com.simiacryptus.ref.lang.RefAware
+public abstract @RefAware
 class ConvolutionLayerTest extends LayerTestBase {
 
   public static @SuppressWarnings("unused")
   ConvolutionLayerTest[] addRefs(ConvolutionLayerTest[] array) {
     if (array == null)
       return null;
-    return java.util.Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayerTest::addRef)
+    return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayerTest::addRef)
         .toArray((x) -> new ConvolutionLayerTest[x]);
   }
 
@@ -40,7 +42,7 @@ class ConvolutionLayerTest extends LayerTestBase {
   ConvolutionLayerTest[][] addRefs(ConvolutionLayerTest[][] array) {
     if (array == null)
       return null;
-    return java.util.Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayerTest::addRefs)
+    return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayerTest::addRefs)
         .toArray((x) -> new ConvolutionLayerTest[x][]);
   }
 
@@ -54,7 +56,7 @@ class ConvolutionLayerTest extends LayerTestBase {
     return (ConvolutionLayerTest) super.addRef();
   }
 
-  public static @com.simiacryptus.ref.lang.RefAware
+  public static @RefAware
   class Basic extends ConvolutionLayerTest {
 
     private final int inputBands = 1;
@@ -64,7 +66,7 @@ class ConvolutionLayerTest extends LayerTestBase {
     Basic[] addRefs(Basic[] array) {
       if (array == null)
         return null;
-      return java.util.Arrays.stream(array).filter((x) -> x != null).map(Basic::addRef).toArray((x) -> new Basic[x]);
+      return Arrays.stream(array).filter((x) -> x != null).map(Basic::addRef).toArray((x) -> new Basic[x]);
     }
 
     @Nonnull
@@ -98,14 +100,14 @@ class ConvolutionLayerTest extends LayerTestBase {
 
   }
 
-  public static @com.simiacryptus.ref.lang.RefAware
+  public static @RefAware
   class Downsize extends ConvolutionLayerTest {
 
     public static @SuppressWarnings("unused")
     Downsize[] addRefs(Downsize[] array) {
       if (array == null)
         return null;
-      return java.util.Arrays.stream(array).filter((x) -> x != null).map(Downsize::addRef)
+      return Arrays.stream(array).filter((x) -> x != null).map(Downsize::addRef)
           .toArray((x) -> new Downsize[x]);
     }
 
@@ -133,14 +135,14 @@ class ConvolutionLayerTest extends LayerTestBase {
 
   }
 
-  public static @com.simiacryptus.ref.lang.RefAware
+  public static @RefAware
   class Upsize extends ConvolutionLayerTest {
 
     public static @SuppressWarnings("unused")
     Upsize[] addRefs(Upsize[] array) {
       if (array == null)
         return null;
-      return java.util.Arrays.stream(array).filter((x) -> x != null).map(Upsize::addRef).toArray((x) -> new Upsize[x]);
+      return Arrays.stream(array).filter((x) -> x != null).map(Upsize::addRef).toArray((x) -> new Upsize[x]);
     }
 
     @Nonnull

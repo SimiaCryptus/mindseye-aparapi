@@ -26,6 +26,7 @@ import com.aparapi.device.Device;
 import com.aparapi.device.OpenCLDevice;
 import com.aparapi.internal.kernel.KernelManager;
 import com.aparapi.internal.opencl.OpenCLPlatform;
+import com.simiacryptus.ref.lang.RefAware;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
-public @com.simiacryptus.ref.lang.RefAware
+public @RefAware
 class AparapiTest {
   public static final Random random = new Random();
   private static final Logger log = LoggerFactory.getLogger(AparapiTest.class);
@@ -126,7 +127,7 @@ class AparapiTest {
     kernel.execute(range);
   }
 
-  public static @com.simiacryptus.ref.lang.RefAware
+  public static @RefAware
   class TestKernel extends Kernel {
 
     public final int[] input = new int[10240];

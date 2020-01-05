@@ -22,8 +22,9 @@ package com.simiacryptus.mindseye.layers.aparapi;
 import com.aparapi.device.Device;
 import com.aparapi.internal.kernel.KernelManager;
 import com.simiacryptus.lang.ResourcePool;
+import com.simiacryptus.ref.lang.RefAware;
 
-public final @com.simiacryptus.ref.lang.RefAware
+public final @RefAware
 class OpenCL {
 
   public static final ResourcePool<Device> devicePool = new ResourcePool<Device>(

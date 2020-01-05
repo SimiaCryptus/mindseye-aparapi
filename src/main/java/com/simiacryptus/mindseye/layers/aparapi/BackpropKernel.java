@@ -22,12 +22,13 @@ package com.simiacryptus.mindseye.layers.aparapi;
 import com.aparapi.Kernel;
 import com.aparapi.device.Device;
 import com.aparapi.internal.kernel.KernelManager;
+import com.simiacryptus.ref.lang.RefAware;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 
-public final @com.simiacryptus.ref.lang.RefAware
+public final @RefAware
 class BackpropKernel extends Kernel {
 
   @Nullable

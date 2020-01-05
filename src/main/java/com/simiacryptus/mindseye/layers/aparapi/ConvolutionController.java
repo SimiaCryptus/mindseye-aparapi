@@ -21,13 +21,16 @@ package com.simiacryptus.mindseye.layers.aparapi;
 
 import com.simiacryptus.mindseye.lang.ComponentException;
 import com.simiacryptus.ref.lang.RecycleBin;
+import com.simiacryptus.ref.lang.RefAware;
+import com.simiacryptus.ref.wrappers.RefArrays;
+import com.simiacryptus.ref.wrappers.RefIntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final @com.simiacryptus.ref.lang.RefAware
+public final @RefAware
 class ConvolutionController {
 
   public static final int MAX_BUFFER_SIZE = 256 * 1024 * 1024;
@@ -51,7 +54,7 @@ class ConvolutionController {
     this.kernelSize = kernelSize;
     this.setPaddingX(paddingX);
     this.setPaddingY(paddingY);
-    outputSize = com.simiacryptus.ref.wrappers.RefIntStream.range(0, kernelSize.length).map(i -> {
+    outputSize = RefIntStream.range(0, kernelSize.length).map(i -> {
       int x;
       @Nullable
       Integer padding;
@@ -290,7 +293,7 @@ class ConvolutionController {
       final int parallelism = Math.min(16, inLength);
       final double[] buffer = RecycleBin.DOUBLES.obtain(weights.length * parallelism);
       gradient(inputBuffer, buffer, weights.length, outputBuffer);
-      com.simiacryptus.ref.wrappers.RefIntStream.range(0, weights.length).forEach(weightIndex -> {
+      RefIntStream.range(0, weights.length).forEach(weightIndex -> {
         for (int i = weightIndex; i < buffer.length; i += weights.length) {
           weights[weightIndex] += buffer[i];
         }
@@ -305,11 +308,11 @@ class ConvolutionController {
   public String toString() {
     @Nonnull final StringBuilder builder = new StringBuilder();
     builder.append("Convolve [");
-    builder.append(com.simiacryptus.ref.wrappers.RefArrays.toString(inputSize));
+    builder.append(RefArrays.toString(inputSize));
     builder.append(" x ");
-    builder.append(com.simiacryptus.ref.wrappers.RefArrays.toString(kernelSize));
+    builder.append(RefArrays.toString(kernelSize));
     builder.append(" => ");
-    builder.append(com.simiacryptus.ref.wrappers.RefArrays.toString(outputSize));
+    builder.append(RefArrays.toString(outputSize));
     builder.append("]");
     return builder.toString();
   }
