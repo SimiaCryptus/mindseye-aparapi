@@ -165,7 +165,8 @@ class ConvolutionLayer extends LayerBase {
     final TensorList batch = input.getData();
     @Nonnull final int[] inputDims = batch.get(0).getDimensions();
     @Nonnull final int[] kernelDims = kernel.getDimensions();
-    @Nullable final double[] kernelData = ConvolutionLayer.this.kernel.getData();
+    final ConvolutionLayer convolutionLayer = ConvolutionLayer.this;
+    @Nullable final double[] kernelData = convolutionLayer.kernel.getData();
     @Nonnull final ConvolutionController convolutionController = new ConvolutionController(inputDims, kernelDims, paddingX,
         paddingY);
     final Tensor[] output = RefIntStream.range(0, batch.length())
@@ -186,33 +187,36 @@ class ConvolutionLayer extends LayerBase {
     }
     int outputLength = output.length;
     return new Result(new TensorArray(output),
-        (@Nonnull final DeltaSet<UUID> buffer, @Nonnull final TensorList error) -> {
-          if (!isFrozen()) {
-            final double[][] inputBuffers = batch.stream().map(x -> {
-              return x.getData();
-            }).toArray(i -> new double[i][]);
-            final double[][] outputBuffers = error.stream().map(x -> {
-              return x.getData();
-            }).toArray(i -> new double[i][]);
-            @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
-            convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
+        new Result.Accumulator() {
+          @Override
+          public void accept(DeltaSet<UUID> buffer, TensorList error) {
+            if (!ConvolutionLayer.this.isFrozen()) {
+              final double[][] inputBuffers = batch.stream().map(x -> {
+                return x.getData();
+              }).toArray(i -> new double[i][]);
+              final double[][] outputBuffers = error.stream().map(x -> {
+                return x.getData();
+              }).toArray(i -> new double[i][]);
+              @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
+              convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
 
-            buffer.get(ConvolutionLayer.this.getId(), kernelData).addInPlace(weightGradient.getData());
-          }
-          if (input.isAlive()) {
-            final Tensor[] inputBufferTensors = RefIntStream.range(0, outputLength)
-                .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
-            final double[][] inputBuffers = RefArrays.stream(inputBufferTensors)
-                .map(x -> {
-                  return x.getData();
-                }).toArray(i -> new double[i][]);
-            final double[][] outputBuffers = error.stream().map(x -> {
-              return x.getData();
-            }).toArray(i -> new double[i][]);
-            convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
-            @Nonnull
-            TensorArray tensorArray = new TensorArray(inputBufferTensors);
-            input.accumulate(buffer, tensorArray);
+              buffer.get(convolutionLayer.getId(), kernelData).addInPlace(weightGradient.getData());
+            }
+            if (input.isAlive()) {
+              final Tensor[] inputBufferTensors = RefIntStream.range(0, outputLength)
+                  .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
+              final double[][] inputBuffers = RefArrays.stream(inputBufferTensors)
+                  .map(x -> {
+                    return x.getData();
+                  }).toArray(i -> new double[i][]);
+              final double[][] outputBuffers = error.stream().map(x -> {
+                return x.getData();
+              }).toArray(i -> new double[i][]);
+              convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
+              @Nonnull
+              TensorArray tensorArray = new TensorArray(inputBufferTensors);
+              input.accumulate(buffer, tensorArray);
+            }
           }
         }) {
 
