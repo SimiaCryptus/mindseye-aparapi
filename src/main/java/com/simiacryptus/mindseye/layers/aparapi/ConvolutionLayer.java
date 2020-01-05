@@ -23,6 +23,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.simiacryptus.mindseye.lang.*;
 import com.simiacryptus.ref.lang.RefAware;
+import com.simiacryptus.ref.lang.RefUtil;
+import com.simiacryptus.ref.lang.ReferenceCounting;
 import com.simiacryptus.ref.wrappers.RefArrays;
 import com.simiacryptus.ref.wrappers.RefIntStream;
 import com.simiacryptus.ref.wrappers.RefList;
@@ -69,10 +71,14 @@ class ConvolutionLayer extends LayerBase {
     this(width, height, inputBands * outputBands, simple);
   }
 
-  protected ConvolutionLayer(@Nonnull final JsonObject json,
-                             Map<CharSequence, byte[]> resources) {
+  protected ConvolutionLayer(@Nonnull final JsonObject json, Map<CharSequence, byte[]> resources) {
     super(json);
-    kernel = Tensor.fromJson(json.get("filter"), resources);
+    {
+      Tensor temp_00_0001 = Tensor.fromJson(json.get("filter"), resources);
+      kernel = temp_00_0001 == null ? null : temp_00_0001.addRef();
+      if (null != temp_00_0001)
+        temp_00_0001.freeRef();
+    }
     JsonElement paddingX = json.get("paddingX");
     if (null != paddingX && paddingX.isJsonPrimitive())
       this.setPaddingX((paddingX.getAsInt()));
@@ -87,17 +93,33 @@ class ConvolutionLayer extends LayerBase {
     this.paddingY = simple ? null : 0;
     @Nonnull
     int[] dimensions = kernel.getDimensions();
-    if (dimensions.length != 3)
+    if (dimensions.length != 3) {
+      kernel.freeRef();
       throw new IllegalArgumentException(RefArrays.toString(dimensions));
-    if (dimensions[0] <= 0)
+    }
+    if (dimensions[0] <= 0) {
+      kernel.freeRef();
       throw new IllegalArgumentException(RefArrays.toString(dimensions));
-    if (dimensions[1] <= 0)
+    }
+    if (dimensions[1] <= 0) {
+      kernel.freeRef();
       throw new IllegalArgumentException(RefArrays.toString(dimensions));
-    if (dimensions[2] <= 0)
+    }
+    if (dimensions[2] <= 0) {
+      kernel.freeRef();
       throw new IllegalArgumentException(RefArrays.toString(dimensions));
-    if (dimensions[2] <= 0)
+    }
+    if (dimensions[2] <= 0) {
+      kernel.freeRef();
       throw new IllegalArgumentException(RefArrays.toString(dimensions));
-    this.kernel = kernel;
+    }
+    {
+      Tensor temp_00_0002 = kernel == null ? null : kernel.addRef();
+      this.kernel = temp_00_0002 == null ? null : temp_00_0002.addRef();
+      if (null != temp_00_0002)
+        temp_00_0002.freeRef();
+    }
+    kernel.freeRef();
   }
 
   @Nullable
@@ -123,22 +145,21 @@ class ConvolutionLayer extends LayerBase {
   @Nonnull
   public ConvolutionLayer setWeights(@Nonnull final DoubleSupplier f) {
     kernel.coordStream(true).forEach(c -> {
-      kernel.set(c, f.getAsDouble());
+      RefUtil.freeRef(kernel.set(c, f.getAsDouble()));
     });
-    return this;
+    return this.addRef();
   }
 
   @Nonnull
   public ConvolutionLayer setWeights(@Nonnull final ToDoubleFunction<Coordinate> f) {
     kernel.coordStream(true).forEach(c -> {
-      kernel.set(c, f.applyAsDouble(c));
+      RefUtil.freeRef(kernel.set(c, f.applyAsDouble(c)));
     });
-    return this;
+    return this.addRef();
   }
 
   @SuppressWarnings("unused")
-  public static ConvolutionLayer fromJson(@Nonnull final JsonObject json,
-                                          Map<CharSequence, byte[]> rs) {
+  public static ConvolutionLayer fromJson(@Nonnull final JsonObject json, Map<CharSequence, byte[]> rs) {
     return new ConvolutionLayer(json, rs);
   }
 
@@ -161,11 +182,15 @@ class ConvolutionLayer extends LayerBase {
   @Nonnull
   @Override
   public Result eval(@Nonnull final Result... inObj) {
-    final Result input = inObj[0];
+    final Result input = inObj[0].addRef();
+    ReferenceCounting.freeRefs(inObj);
     final TensorList batch = input.getData();
-    @Nonnull final int[] inputDims = batch.get(0).getDimensions();
+    Tensor temp_00_0012 = batch.get(0);
+    @Nonnull final int[] inputDims = temp_00_0012.getDimensions();
+    if (null != temp_00_0012)
+      temp_00_0012.freeRef();
     @Nonnull final int[] kernelDims = kernel.getDimensions();
-    final ConvolutionLayer convolutionLayer = ConvolutionLayer.this;
+    final ConvolutionLayer convolutionLayer = ConvolutionLayer.this.addRef();
     @Nullable final double[] kernelData = convolutionLayer.kernel.getData();
     @Nonnull final ConvolutionController convolutionController = new ConvolutionController(inputDims, kernelDims, paddingX,
         paddingY);
@@ -175,65 +200,125 @@ class ConvolutionLayer extends LayerBase {
       final double[][] inputBuffers = batch.stream().map(x -> {
         @Nullable
         double[] data = x.getData();
-        x.detach();
+        RefUtil.freeRef(x.detach());
+        if (null != x)
+          x.freeRef();
         return data;
       }).toArray(i -> new double[i][]);
-      final double[][] outputBuffers = RefArrays.stream(output).map(x -> x.getData())
-          .toArray(i -> new double[i][]);
+      final double[][] outputBuffers = RefArrays.stream(Tensor.addRefs(output))
+          .map(x -> {
+            double[] temp_00_0007 = x.getData();
+            if (null != x)
+              x.freeRef();
+            return temp_00_0007;
+          }).toArray(i -> new double[i][]);
       convolutionController.convolve(inputBuffers, kernelData, outputBuffers);
     } catch (@Nonnull final Throwable e) {
-      throw new RuntimeException(
-          "Error mapCoords png res " + RefArrays.toString(inputDims), e);
+      throw new RuntimeException("Error mapCoords png res " + RefArrays.toString(inputDims), e);
     }
     int outputLength = output.length;
-    return new Result(new TensorArray(output),
-        new Result.Accumulator() {
-          @Override
-          public void accept(DeltaSet<UUID> buffer, TensorList error) {
-            if (!ConvolutionLayer.this.isFrozen()) {
-              final double[][] inputBuffers = batch.stream().map(x -> {
-                return x.getData();
-              }).toArray(i -> new double[i][]);
-              final double[][] outputBuffers = error.stream().map(x -> {
-                return x.getData();
-              }).toArray(i -> new double[i][]);
-              @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
-              convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
+    try {
+      try {
+        try {
+          try {
+            return new Result(new TensorArray(Tensor.addRefs(output)),
+                new Result.Accumulator() {
+                  {
+                  }
 
-              buffer.get(convolutionLayer.getId(), kernelData).addInPlace(weightGradient.getData());
-            }
-            if (input.isAlive()) {
-              final Tensor[] inputBufferTensors = RefIntStream.range(0, outputLength)
-                  .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
-              final double[][] inputBuffers = RefArrays.stream(inputBufferTensors)
-                  .map(x -> {
-                    return x.getData();
-                  }).toArray(i -> new double[i][]);
-              final double[][] outputBuffers = error.stream().map(x -> {
-                return x.getData();
-              }).toArray(i -> new double[i][]);
-              convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
-              @Nonnull
-              TensorArray tensorArray = new TensorArray(inputBufferTensors);
-              input.accumulate(buffer, tensorArray);
-            }
+                  @Override
+                  public void accept(DeltaSet<UUID> buffer, TensorList error) {
+                    if (!ConvolutionLayer.this.isFrozen()) {
+                      final double[][] inputBuffers = batch.stream().map(x -> {
+                        double[] temp_00_0008 = x.getData();
+                        if (null != x)
+                          x.freeRef();
+                        return temp_00_0008;
+                      }).toArray(i -> new double[i][]);
+                      final double[][] outputBuffers = error.stream().map(x -> {
+                        double[] temp_00_0009 = x.getData();
+                        if (null != x)
+                          x.freeRef();
+                        return temp_00_0009;
+                      }).toArray(i -> new double[i][]);
+                      @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
+                      convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
+
+                      Delta<UUID> temp_00_0013 = buffer
+                          .get(convolutionLayer.getId(), kernelData);
+                      RefUtil.freeRef(temp_00_0013.addInPlace(weightGradient.getData()));
+                      if (null != temp_00_0013)
+                        temp_00_0013.freeRef();
+                      weightGradient.freeRef();
+                    }
+                    if (input.isAlive()) {
+                      final Tensor[] inputBufferTensors = RefIntStream.range(0, outputLength)
+                          .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
+                      final double[][] inputBuffers = RefArrays
+                          .stream(Tensor.addRefs(inputBufferTensors)).map(x -> {
+                            double[] temp_00_0010 = x.getData();
+                            if (null != x)
+                              x.freeRef();
+                            return temp_00_0010;
+                          }).toArray(i -> new double[i][]);
+                      final double[][] outputBuffers = error.stream().map(x -> {
+                        double[] temp_00_0011 = x.getData();
+                        if (null != x)
+                          x.freeRef();
+                        return temp_00_0011;
+                      }).toArray(i -> new double[i][]);
+                      convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
+                      @Nonnull
+                      TensorArray tensorArray = new TensorArray(
+                          Tensor.addRefs(inputBufferTensors));
+                      if (null != inputBufferTensors)
+                        ReferenceCounting.freeRefs(inputBufferTensors);
+                      input.accumulate(buffer == null ? null : buffer.addRef(),
+                          tensorArray == null ? null : tensorArray);
+                    }
+                    if (null != error)
+                      error.freeRef();
+                    if (null != buffer)
+                      buffer.freeRef();
+                  }
+
+                  public @SuppressWarnings("unused")
+                  void _free() {
+                  }
+                }) {
+
+              {
+              }
+
+              @Override
+              public boolean isAlive() {
+                return input.isAlive() || !isFrozen();
+              }
+
+              public void _free() {
+              }
+            };
+          } finally {
+            if (null != output)
+              ReferenceCounting.freeRefs(output);
           }
-        }) {
-
-      @Override
-      public boolean isAlive() {
-        return input.isAlive() || !isFrozen();
+        } finally {
+          if (null != convolutionLayer)
+            convolutionLayer.freeRef();
+        }
+      } finally {
+        if (null != batch)
+          batch.freeRef();
       }
-
-      public void _free() {
-      }
-    };
+    } finally {
+      if (null != input)
+        input.freeRef();
+    }
   }
 
   @Nonnull
   @Override
-  public JsonObject getJson(Map<CharSequence, byte[]> resources,
-                            @Nonnull DataSerializer dataSerializer) {
+  public JsonObject getJson(Map<CharSequence, byte[]> resources, @Nonnull DataSerializer dataSerializer) {
     @Nonnull final JsonObject json = super.getJsonStub();
     json.add("filter", kernel.getJson(resources, dataSerializer));
     JsonElement paddingX = json.get("paddingX");
@@ -252,6 +337,8 @@ class ConvolutionLayer extends LayerBase {
   }
 
   public void _free() {
+    if (null != kernel)
+      kernel.freeRef();
     super._free();
   }
 

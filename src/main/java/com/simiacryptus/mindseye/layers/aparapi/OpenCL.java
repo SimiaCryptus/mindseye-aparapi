@@ -33,6 +33,10 @@ class OpenCL {
     public Device create() {
       return KernelManager.instance().bestDevice();
     }
+
+    public @SuppressWarnings("unused")
+    void _free() {
+    }
   };
 
 }

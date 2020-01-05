@@ -72,7 +72,13 @@ class ConvolutionLayerTest extends LayerTestBase {
     @Nonnull
     @Override
     public Layer getLayer(final int[][] inputSize, Random random) {
-      return new ConvolutionLayer(3, 3, inputBands, outputBands, true).setWeights(() -> this.random());
+      ConvolutionLayer temp_01_0002 = new ConvolutionLayer(3, 3, inputBands,
+          outputBands, true);
+      ConvolutionLayer temp_01_0001 = temp_01_0002
+          .setWeights(() -> this.random());
+      if (null != temp_01_0002)
+        temp_01_0002.freeRef();
+      return temp_01_0001;
     }
 
     @Nonnull
@@ -120,7 +126,12 @@ class ConvolutionLayerTest extends LayerTestBase {
     @Nonnull
     @Override
     public Layer getLayer(final int[][] inputSize, Random random) {
-      return new ConvolutionLayer(3, 3, 7, 3, false).setWeights(() -> this.random());
+      ConvolutionLayer temp_01_0004 = new ConvolutionLayer(3, 3, 7, 3, false);
+      ConvolutionLayer temp_01_0003 = temp_01_0004
+          .setWeights(() -> this.random());
+      if (null != temp_01_0004)
+        temp_01_0004.freeRef();
+      return temp_01_0003;
     }
 
     public @SuppressWarnings("unused")
@@ -154,7 +165,12 @@ class ConvolutionLayerTest extends LayerTestBase {
     @Nonnull
     @Override
     public Layer getLayer(final int[][] inputSize, Random random) {
-      return new ConvolutionLayer(3, 3, 2, 3, false).setWeights(() -> this.random());
+      ConvolutionLayer temp_01_0006 = new ConvolutionLayer(3, 3, 2, 3, false);
+      ConvolutionLayer temp_01_0005 = temp_01_0006
+          .setWeights(() -> this.random());
+      if (null != temp_01_0006)
+        temp_01_0006.freeRef();
+      return temp_01_0005;
     }
 
     public @SuppressWarnings("unused")
