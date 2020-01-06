@@ -28,7 +28,7 @@ public final @RefAware
 class OpenCL {
 
   public static final ResourcePool<Device> devicePool = new ResourcePool<Device>(
-      Integer.parseInt(System.getProperty("num_gpus", "1"))) {
+      Integer.parseInt(com.simiacryptus.ref.wrappers.RefSystem.getProperty("num_gpus", "1"))) {
     @Override
     public Device create() {
       return KernelManager.instance().bestDevice();

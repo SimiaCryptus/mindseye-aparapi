@@ -144,7 +144,7 @@ class ConvolutionController {
             }
             for (int i = 0; i < currentNumItems; i++) {
               assert outLength == output[currentIndexOffset + i].length;
-              System.arraycopy(output[currentIndexOffset + i], 0, outputBuffer, i * outLength, outLength);
+              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(output[currentIndexOffset + i], 0, outputBuffer, i * outLength, outLength);
             }
             assert 0 < inputBuffer.length;
             assert 0 < outputBuffer.length;
@@ -163,7 +163,7 @@ class ConvolutionController {
             ConvolutionController.backpropTask.inputSize = null;
             for (int i = 0; i < currentNumItems; i++) {
               assert inLength == input[currentIndexOffset + i].length;
-              System.arraycopy(inputBuffer, i * inLength, input[currentIndexOffset + i], 0, inLength);
+              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(inputBuffer, i * inLength, input[currentIndexOffset + i], 0, inLength);
             }
           }
           RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
@@ -224,7 +224,7 @@ class ConvolutionController {
             }
             for (int i = 0; i < currentNumItems; i++) {
               assert inLength == input[currentIndexOffset + i].length;
-              System.arraycopy(input[currentIndexOffset + i], 0, inputBuffer, i * inLength, inLength);
+              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(input[currentIndexOffset + i], 0, inputBuffer, i * inLength, inLength);
             }
             assert 0 < inputBuffer.length;
             assert 0 < outputBuffer.length;
@@ -243,7 +243,7 @@ class ConvolutionController {
             ConvolutionController.convolveTask.inputSize = null;
             for (int i = 0; i < currentNumItems; i++) {
               assert outLength == output[currentIndexOffset + i].length;
-              System.arraycopy(outputBuffer, i * outLength, output[currentIndexOffset + i], 0, outLength);
+              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(outputBuffer, i * outLength, output[currentIndexOffset + i], 0, outLength);
             }
           }
           RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
@@ -287,8 +287,8 @@ class ConvolutionController {
       for (int i = 0; i < currentNumItems; i++) {
         assert inLength == input[currentIndexOffset + i].length;
         assert outLength == output[currentIndexOffset + i].length;
-        System.arraycopy(input[currentIndexOffset + i], 0, inputBuffer, i * inLength, inLength);
-        System.arraycopy(output[currentIndexOffset + i], 0, outputBuffer, i * outLength, outLength);
+        com.simiacryptus.ref.wrappers.RefSystem.arraycopy(input[currentIndexOffset + i], 0, inputBuffer, i * inLength, inLength);
+        com.simiacryptus.ref.wrappers.RefSystem.arraycopy(output[currentIndexOffset + i], 0, outputBuffer, i * outLength, outLength);
       }
       final int parallelism = Math.min(16, inLength);
       final double[] buffer = RecycleBin.DOUBLES.obtain(weights.length * parallelism);
@@ -306,7 +306,7 @@ class ConvolutionController {
 
   @Override
   public String toString() {
-    @Nonnull final StringBuilder builder = new StringBuilder();
+    @Nonnull final com.simiacryptus.ref.wrappers.RefStringBuilder builder = new com.simiacryptus.ref.wrappers.RefStringBuilder();
     builder.append("Convolve [");
     builder.append(RefArrays.toString(inputSize));
     builder.append(" x ");
