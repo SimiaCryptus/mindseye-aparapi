@@ -28,8 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 
-public final @RefAware
-class GradientKernel extends Kernel {
+public final class GradientKernel extends Kernel {
 
   @Nullable
   public double[] input;

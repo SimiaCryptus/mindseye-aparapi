@@ -28,8 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 
-public final @RefAware
-class ConvolveKernel extends Kernel {
+public final class ConvolveKernel extends Kernel {
 
   @Nullable
   public double[] input;

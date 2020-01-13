@@ -24,8 +24,7 @@ import com.aparapi.internal.kernel.KernelManager;
 import com.simiacryptus.lang.ResourcePool;
 import com.simiacryptus.ref.lang.RefAware;
 
-public final @RefAware
-class OpenCL {
+public final class OpenCL {
 
   public static final ResourcePool<Device> devicePool = new ResourcePool<Device>(
       Integer.parseInt(com.simiacryptus.ref.wrappers.RefSystem.getProperty("num_gpus", "1"))) {
@@ -34,8 +33,7 @@ class OpenCL {
       return KernelManager.instance().bestDevice();
     }
 
-    public @SuppressWarnings("unused")
-    void _free() {
+    public @SuppressWarnings("unused") void _free() {
     }
   };
 

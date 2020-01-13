@@ -28,8 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 
-public final @RefAware
-class BackpropKernel extends Kernel {
+public final class BackpropKernel extends Kernel {
 
   @Nullable
   public double[] input;

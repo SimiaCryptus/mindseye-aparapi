@@ -30,8 +30,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final @RefAware
-class ConvolutionController {
+public final class ConvolutionController {
 
   public static final int MAX_BUFFER_SIZE = 256 * 1024 * 1024;
   private static final BackpropKernel backpropTask = new BackpropKernel();
@@ -49,7 +48,7 @@ class ConvolutionController {
   private Integer paddingY = null;
 
   public ConvolutionController(final int[] inputSize, @Nonnull final int[] kernelSize, final Integer paddingX,
-                               Integer paddingY) {
+      Integer paddingY) {
     this.inputSize = inputSize;
     this.kernelSize = kernelSize;
     this.setPaddingX(paddingX);
@@ -103,7 +102,7 @@ class ConvolutionController {
   }
 
   public void backprop(@Nonnull final double[][] input, @Nonnull final double[] weights,
-                       @Nonnull final double[][] output) {
+      @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
     final int inLength = input[0].length;
@@ -121,9 +120,9 @@ class ConvolutionController {
           ConvolutionController.backpropTask.put(ConvolutionController.backpropTask.weights);
           ConvolutionController.backpropTask.kernelSize = kernelSize;
           ConvolutionController.backpropTask.put(ConvolutionController.backpropTask.kernelSize);
-          ConvolutionController.backpropTask.kernelOffset = new int[]{
+          ConvolutionController.backpropTask.kernelOffset = new int[] {
               null == paddingY ? (kernelSize[1] - 1) / 2 : paddingY,
-              null == paddingX ? (kernelSize[0] - 1) / 2 : paddingX};
+              null == paddingX ? (kernelSize[0] - 1) / 2 : paddingX };
           ConvolutionController.backpropTask.put(ConvolutionController.convolveTask.kernelOffset);
           @Nullable
           double[] inputBuffer = null;
@@ -144,7 +143,8 @@ class ConvolutionController {
             }
             for (int i = 0; i < currentNumItems; i++) {
               assert outLength == output[currentIndexOffset + i].length;
-              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(output[currentIndexOffset + i], 0, outputBuffer, i * outLength, outLength);
+              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(output[currentIndexOffset + i], 0, outputBuffer,
+                  i * outLength, outLength);
             }
             assert 0 < inputBuffer.length;
             assert 0 < outputBuffer.length;
@@ -163,7 +163,8 @@ class ConvolutionController {
             ConvolutionController.backpropTask.inputSize = null;
             for (int i = 0; i < currentNumItems; i++) {
               assert inLength == input[currentIndexOffset + i].length;
-              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(inputBuffer, i * inLength, input[currentIndexOffset + i], 0, inLength);
+              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(inputBuffer, i * inLength,
+                  input[currentIndexOffset + i], 0, inLength);
             }
           }
           RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
@@ -179,7 +180,7 @@ class ConvolutionController {
   }
 
   public void convolve(@Nonnull final double[][] input, @Nonnull final double[] weights,
-                       @Nonnull final double[][] output) {
+      @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
     final int inLength = input[0].length;
@@ -197,9 +198,9 @@ class ConvolutionController {
           ConvolutionController.convolveTask.weights = weights;
           ConvolutionController.convolveTask.put(ConvolutionController.convolveTask.weights);
           ConvolutionController.convolveTask.kernelSize = kernelSize;
-          ConvolutionController.convolveTask.kernelOffset = new int[]{
+          ConvolutionController.convolveTask.kernelOffset = new int[] {
               null == paddingY ? (kernelSize[1] - 1) / 2 : paddingY,
-              null == paddingX ? (kernelSize[0] - 1) / 2 : paddingX};
+              null == paddingX ? (kernelSize[0] - 1) / 2 : paddingX };
           ConvolutionController.convolveTask.put(ConvolutionController.convolveTask.kernelOffset);
           ConvolutionController.convolveTask.put(ConvolutionController.convolveTask.kernelSize);
           @Nullable
@@ -224,7 +225,8 @@ class ConvolutionController {
             }
             for (int i = 0; i < currentNumItems; i++) {
               assert inLength == input[currentIndexOffset + i].length;
-              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(input[currentIndexOffset + i], 0, inputBuffer, i * inLength, inLength);
+              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(input[currentIndexOffset + i], 0, inputBuffer,
+                  i * inLength, inLength);
             }
             assert 0 < inputBuffer.length;
             assert 0 < outputBuffer.length;
@@ -243,7 +245,8 @@ class ConvolutionController {
             ConvolutionController.convolveTask.inputSize = null;
             for (int i = 0; i < currentNumItems; i++) {
               assert outLength == output[currentIndexOffset + i].length;
-              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(outputBuffer, i * outLength, output[currentIndexOffset + i], 0, outLength);
+              com.simiacryptus.ref.wrappers.RefSystem.arraycopy(outputBuffer, i * outLength,
+                  output[currentIndexOffset + i], 0, outLength);
             }
           }
           RecycleBin.DOUBLES.recycle(inputBuffer, inputBuffer.length);
@@ -258,7 +261,7 @@ class ConvolutionController {
   }
 
   public void gradient(@Nonnull final double[][] input, @Nonnull final double[] weights,
-                       @Nonnull final double[][] output) {
+      @Nonnull final double[][] output) {
     final int length = input.length;
     assert length == output.length;
     final int inLength = input[0].length;
@@ -287,8 +290,10 @@ class ConvolutionController {
       for (int i = 0; i < currentNumItems; i++) {
         assert inLength == input[currentIndexOffset + i].length;
         assert outLength == output[currentIndexOffset + i].length;
-        com.simiacryptus.ref.wrappers.RefSystem.arraycopy(input[currentIndexOffset + i], 0, inputBuffer, i * inLength, inLength);
-        com.simiacryptus.ref.wrappers.RefSystem.arraycopy(output[currentIndexOffset + i], 0, outputBuffer, i * outLength, outLength);
+        com.simiacryptus.ref.wrappers.RefSystem.arraycopy(input[currentIndexOffset + i], 0, inputBuffer, i * inLength,
+            inLength);
+        com.simiacryptus.ref.wrappers.RefSystem.arraycopy(output[currentIndexOffset + i], 0, outputBuffer,
+            i * outLength, outLength);
       }
       final int parallelism = Math.min(16, inLength);
       final double[] buffer = RecycleBin.DOUBLES.obtain(weights.length * parallelism);
@@ -306,7 +311,8 @@ class ConvolutionController {
 
   @Override
   public String toString() {
-    @Nonnull final com.simiacryptus.ref.wrappers.RefStringBuilder builder = new com.simiacryptus.ref.wrappers.RefStringBuilder();
+    @Nonnull
+    final com.simiacryptus.ref.wrappers.RefStringBuilder builder = new com.simiacryptus.ref.wrappers.RefStringBuilder();
     builder.append("Convolve [");
     builder.append(RefArrays.toString(inputSize));
     builder.append(" x ");
@@ -318,7 +324,7 @@ class ConvolutionController {
   }
 
   private void gradient(@Nonnull final double[] input, @Nonnull final double[] weights, final int weightSize,
-                        @Nonnull final double[] output) {
+      @Nonnull final double[] output) {
     assert 0 < input.length;
     assert 0 < weights.length;
     assert 0 < output.length;
@@ -333,9 +339,9 @@ class ConvolutionController {
           ConvolutionController.kernelTask.kernelSize = kernelSize;
           ConvolutionController.kernelTask.weightSize = weightSize;
           ConvolutionController.kernelTask.paralellism = weights.length / weightSize;
-          ConvolutionController.kernelTask.kernelOffset = new int[]{
+          ConvolutionController.kernelTask.kernelOffset = new int[] {
               paddingY == null ? (kernelSize[1] - 1) / 2 : paddingY,
-              paddingX == null ? (kernelSize[0] - 1) / 2 : paddingX};
+              paddingX == null ? (kernelSize[0] - 1) / 2 : paddingX };
           ConvolutionController.kernelTask.setExplicit(true);
           ConvolutionController.kernelTask.put(ConvolutionController.convolveTask.kernelOffset);
           ConvolutionController.kernelTask.put(ConvolutionController.kernelTask.outputSize);
