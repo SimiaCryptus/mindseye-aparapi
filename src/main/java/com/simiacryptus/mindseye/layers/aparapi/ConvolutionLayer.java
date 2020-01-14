@@ -22,7 +22,6 @@ package com.simiacryptus.mindseye.layers.aparapi;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.simiacryptus.mindseye.lang.*;
-import com.simiacryptus.ref.lang.RefAware;
 import com.simiacryptus.ref.lang.RefUtil;
 import com.simiacryptus.ref.lang.ReferenceCounting;
 import com.simiacryptus.ref.wrappers.RefArrays;
@@ -66,7 +65,7 @@ public class ConvolutionLayer extends LayerBase {
   }
 
   public ConvolutionLayer(final int width, final int height, final int inputBands, final int outputBands,
-      final boolean simple) {
+                          final boolean simple) {
     this(width, height, inputBands * outputBands, simple);
   }
 
@@ -106,14 +105,9 @@ public class ConvolutionLayer extends LayerBase {
       kernel.freeRef();
       throw new IllegalArgumentException(RefArrays.toString(dimensions));
     }
-    if (dimensions[2] <= 0) {
-      kernel.freeRef();
-      throw new IllegalArgumentException(RefArrays.toString(dimensions));
-    }
-    Tensor temp_00_0002 = kernel == null ? null : kernel.addRef();
-    this.kernel = temp_00_0002 == null ? null : temp_00_0002.addRef();
-    if (null != temp_00_0002)
-      temp_00_0002.freeRef();
+    Tensor temp_00_0002 = kernel.addRef();
+    this.kernel = temp_00_0002.addRef();
+    temp_00_0002.freeRef();
     kernel.freeRef();
   }
 
@@ -139,6 +133,7 @@ public class ConvolutionLayer extends LayerBase {
 
   @Nonnull
   public ConvolutionLayer setWeights(@Nonnull final DoubleSupplier f) {
+    assert kernel != null;
     kernel.coordStream(true).forEach(c -> {
       RefUtil.freeRef(kernel.set(c, f.getAsDouble()));
     });
@@ -147,25 +142,31 @@ public class ConvolutionLayer extends LayerBase {
 
   @Nonnull
   public ConvolutionLayer setWeights(@Nonnull final ToDoubleFunction<Coordinate> f) {
+    assert kernel != null;
     kernel.coordStream(true).forEach(c -> {
       RefUtil.freeRef(kernel.set(c, f.applyAsDouble(c)));
     });
     return this.addRef();
   }
 
+  @Nonnull
   @SuppressWarnings("unused")
   public static ConvolutionLayer fromJson(@Nonnull final JsonObject json, Map<CharSequence, byte[]> rs) {
     return new ConvolutionLayer(json, rs);
   }
 
-  public static @SuppressWarnings("unused") ConvolutionLayer[] addRefs(ConvolutionLayer[] array) {
+  @Nullable
+  public static @SuppressWarnings("unused")
+  ConvolutionLayer[] addRefs(@Nullable ConvolutionLayer[] array) {
     if (array == null)
       return null;
     return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayer::addRef)
         .toArray((x) -> new ConvolutionLayer[x]);
   }
 
-  public static @SuppressWarnings("unused") ConvolutionLayer[][] addRefs(ConvolutionLayer[][] array) {
+  @Nullable
+  public static @SuppressWarnings("unused")
+  ConvolutionLayer[][] addRefs(@Nullable ConvolutionLayer[][] array) {
     if (array == null)
       return null;
     return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayer::addRefs)
@@ -179,17 +180,14 @@ public class ConvolutionLayer extends LayerBase {
     ReferenceCounting.freeRefs(inObj);
     final TensorList batch = input.getData();
     Tensor temp_00_0012 = batch.get(0);
-    @Nonnull
-    final int[] inputDims = temp_00_0012.getDimensions();
-    if (null != temp_00_0012)
-      temp_00_0012.freeRef();
-    @Nonnull
-    final int[] kernelDims = kernel.getDimensions();
+    @Nonnull final int[] inputDims = temp_00_0012.getDimensions();
+    temp_00_0012.freeRef();
+    assert kernel != null;
+    @Nonnull final int[] kernelDims = kernel.getDimensions();
     final ConvolutionLayer convolutionLayer = ConvolutionLayer.this.addRef();
-    @Nullable
-    final double[] kernelData = convolutionLayer.kernel.getData();
-    @Nonnull
-    final ConvolutionController convolutionController = new ConvolutionController(inputDims, kernelDims, paddingX,
+    assert convolutionLayer.kernel != null;
+    @Nullable final double[] kernelData = convolutionLayer.kernel.getData();
+    @Nonnull final ConvolutionController convolutionController = new ConvolutionController(inputDims, kernelDims, paddingX,
         paddingY);
     final Tensor[] output = RefIntStream.range(0, batch.length())
         .mapToObj(dataIndex -> new Tensor(convolutionController.getOutputDims())).toArray(i -> new Tensor[i]);
@@ -198,14 +196,12 @@ public class ConvolutionLayer extends LayerBase {
         @Nullable
         double[] data = x.getData();
         RefUtil.freeRef(x.detach());
-        if (null != x)
-          x.freeRef();
+        x.freeRef();
         return data;
       }).toArray(i -> new double[i][]);
       final double[][] outputBuffers = RefArrays.stream(Tensor.addRefs(output)).map(x -> {
         double[] temp_00_0007 = x.getData();
-        if (null != x)
-          x.freeRef();
+        x.freeRef();
         return temp_00_0007;
       }).toArray(i -> new double[i][]);
       convolutionController.convolve(inputBuffers, kernelData, outputBuffers);
@@ -222,28 +218,25 @@ public class ConvolutionLayer extends LayerBase {
               }
 
               @Override
-              public void accept(DeltaSet<UUID> buffer, TensorList error) {
+              public void accept(@Nonnull DeltaSet<UUID> buffer, @Nonnull TensorList error) {
                 if (!ConvolutionLayer.this.isFrozen()) {
                   final double[][] inputBuffers = batch.stream().map(x -> {
                     double[] temp_00_0008 = x.getData();
-                    if (null != x)
-                      x.freeRef();
+                    x.freeRef();
                     return temp_00_0008;
                   }).toArray(i -> new double[i][]);
                   final double[][] outputBuffers = error.stream().map(x -> {
                     double[] temp_00_0009 = x.getData();
-                    if (null != x)
-                      x.freeRef();
+                    x.freeRef();
                     return temp_00_0009;
                   }).toArray(i -> new double[i][]);
-                  @Nonnull
-                  final Tensor weightGradient = new Tensor(kernelDims);
+                  @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
                   convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
 
                   Delta<UUID> temp_00_0013 = buffer.get(convolutionLayer.getId(), kernelData);
+                  assert temp_00_0013 != null;
                   RefUtil.freeRef(temp_00_0013.addInPlace(weightGradient.getData()));
-                  if (null != temp_00_0013)
-                    temp_00_0013.freeRef();
+                  temp_00_0013.freeRef();
                   weightGradient.freeRef();
                 }
                 if (input.isAlive()) {
@@ -251,30 +244,26 @@ public class ConvolutionLayer extends LayerBase {
                       .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
                   final double[][] inputBuffers = RefArrays.stream(Tensor.addRefs(inputBufferTensors)).map(x -> {
                     double[] temp_00_0010 = x.getData();
-                    if (null != x)
-                      x.freeRef();
+                    x.freeRef();
                     return temp_00_0010;
                   }).toArray(i -> new double[i][]);
                   final double[][] outputBuffers = error.stream().map(x -> {
                     double[] temp_00_0011 = x.getData();
-                    if (null != x)
-                      x.freeRef();
+                    x.freeRef();
                     return temp_00_0011;
                   }).toArray(i -> new double[i][]);
                   convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
                   @Nonnull
                   TensorArray tensorArray = new TensorArray(Tensor.addRefs(inputBufferTensors));
-                  if (null != inputBufferTensors)
-                    ReferenceCounting.freeRefs(inputBufferTensors);
-                  input.accumulate(buffer == null ? null : buffer.addRef(), tensorArray == null ? null : tensorArray);
+                  ReferenceCounting.freeRefs(inputBufferTensors);
+                  input.accumulate(buffer.addRef(), tensorArray);
                 }
-                if (null != error)
-                  error.freeRef();
-                if (null != buffer)
-                  buffer.freeRef();
+                error.freeRef();
+                buffer.freeRef();
               }
 
-              public @SuppressWarnings("unused") void _free() {
+              public @SuppressWarnings("unused")
+              void _free() {
               }
             }) {
 
@@ -290,28 +279,24 @@ public class ConvolutionLayer extends LayerBase {
               }
             };
           } finally {
-            if (null != output)
-              ReferenceCounting.freeRefs(output);
+            ReferenceCounting.freeRefs(output);
           }
         } finally {
-          if (null != convolutionLayer)
-            convolutionLayer.freeRef();
+          convolutionLayer.freeRef();
         }
       } finally {
-        if (null != batch)
-          batch.freeRef();
+        batch.freeRef();
       }
     } finally {
-      if (null != input)
-        input.freeRef();
+      input.freeRef();
     }
   }
 
   @Nonnull
   @Override
   public JsonObject getJson(Map<CharSequence, byte[]> resources, @Nonnull DataSerializer dataSerializer) {
-    @Nonnull
-    final JsonObject json = super.getJsonStub();
+    @Nonnull final JsonObject json = super.getJsonStub();
+    assert kernel != null;
     json.add("filter", kernel.getJson(resources, dataSerializer));
     JsonElement paddingX = json.get("paddingX");
     if (null != paddingX && paddingX.isJsonPrimitive())
@@ -325,6 +310,7 @@ public class ConvolutionLayer extends LayerBase {
   @Nonnull
   @Override
   public RefList<double[]> state() {
+    assert kernel != null;
     return RefArrays.asList(kernel.getData());
   }
 
@@ -334,7 +320,10 @@ public class ConvolutionLayer extends LayerBase {
     super._free();
   }
 
-  public @Override @SuppressWarnings("unused") ConvolutionLayer addRef() {
+  @Nonnull
+  public @Override
+  @SuppressWarnings("unused")
+  ConvolutionLayer addRef() {
     return (ConvolutionLayer) super.addRef();
   }
 }

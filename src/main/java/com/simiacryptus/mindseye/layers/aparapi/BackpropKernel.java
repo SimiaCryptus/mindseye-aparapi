@@ -22,7 +22,6 @@ package com.simiacryptus.mindseye.layers.aparapi;
 import com.aparapi.Kernel;
 import com.aparapi.device.Device;
 import com.aparapi.internal.kernel.KernelManager;
-import com.simiacryptus.ref.lang.RefAware;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,20 +49,25 @@ public final class BackpropKernel extends Kernel {
   public void exe(@Nonnull final Device device) {
     //assert this.outputSize[0] * this.outputSize[1] * this.outputSize[2] == this.output.length;
     //assert this.inputSize[0] * this.inputSize[1] * this.inputSize[2] == this.input.length;
+    assert weights != null;
+    assert kernelSize != null;
     assert kernelSize[0] * kernelSize[1] * kernelSize[2] == weights.length;
     LinkedHashSet<Device> devices = new LinkedHashSet<>();
     devices.add(device);
     KernelManager.instance().setPreferredDevices(this, devices);
+    assert input != null;
     execute(device.createRange(input.length, 1));
   }
 
   @Override
   public void run() {
     final int i = getGlobalId();
+    assert input != null;
     input[i] = run(i);
   }
 
   public final double run(final int i) {
+    assert inputSize != null;
     final int is0 = inputSize[0];
     final int is1 = is0 * inputSize[1];
     final int is2 = is1 * inputSize[2];
@@ -73,8 +77,10 @@ public final class BackpropKernel extends Kernel {
     final int i0 = i % is0;
 
     double accum = 0;
+    assert weights != null;
     for (int k = 0; k < weights.length; k++) {
       if (0. != weights[k]) {
+        assert kernelSize != null;
         final int ks0 = kernelSize[0];
         final int ks1 = ks0 * kernelSize[1];
         final int ks2 = ks1 * kernelSize[2];
@@ -82,12 +88,14 @@ public final class BackpropKernel extends Kernel {
         final int k1 = k % ks1 / ks0;
         final int k0 = k % ks0;
 
+        assert outputSize != null;
         final int o2 = k2 - i2 * outputSize[2];
         if (o2 >= 0 && o2 < outputSize[2]) {
           final int o1 = i1 + k1 - kernelOffset[1];
           final int o0 = i0 + k0 - kernelOffset[0];
           if (o0 < outputSize[0] && o1 < outputSize[1] && o0 >= 0 && o1 >= 0) {
             final int o = o0 + outputSize[0] * (o1 + outputSize[1] * (o2 + outputSize[2] * batch));
+            assert output != null;
             accum += output[o] * weights[k];
           }
         }

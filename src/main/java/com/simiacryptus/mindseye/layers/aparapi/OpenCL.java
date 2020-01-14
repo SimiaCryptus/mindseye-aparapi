@@ -22,18 +22,19 @@ package com.simiacryptus.mindseye.layers.aparapi;
 import com.aparapi.device.Device;
 import com.aparapi.internal.kernel.KernelManager;
 import com.simiacryptus.lang.ResourcePool;
-import com.simiacryptus.ref.lang.RefAware;
+import com.simiacryptus.ref.wrappers.RefSystem;
 
 public final class OpenCL {
 
   public static final ResourcePool<Device> devicePool = new ResourcePool<Device>(
-      Integer.parseInt(com.simiacryptus.ref.wrappers.RefSystem.getProperty("num_gpus", "1"))) {
+      Integer.parseInt(RefSystem.getProperty("num_gpus", "1"))) {
     @Override
     public Device create() {
       return KernelManager.instance().bestDevice();
     }
 
-    public @SuppressWarnings("unused") void _free() {
+    public @SuppressWarnings("unused")
+    void _free() {
     }
   };
 

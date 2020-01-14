@@ -22,7 +22,6 @@ package com.simiacryptus.mindseye.layers.aparapi;
 import com.aparapi.Kernel;
 import com.aparapi.device.Device;
 import com.aparapi.internal.kernel.KernelManager;
-import com.simiacryptus.ref.lang.RefAware;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,12 +55,14 @@ public final class ConvolveKernel extends Kernel {
     LinkedHashSet<Device> devices = new LinkedHashSet<>();
     devices.add(device);
     KernelManager.instance().setPreferredDevices(this, devices);
+    assert output != null;
     execute(device.createRange(output.length, 1));
   }
 
   @Override
   public void run() {
     final int i = getGlobalId();
+    assert outputSize != null;
     final int os0 = outputSize[0];
     final int os1 = os0 * outputSize[1];
     final int os2 = os1 * outputSize[2];
@@ -71,8 +72,10 @@ public final class ConvolveKernel extends Kernel {
     final int o0 = i % os0;
 
     double accum = 0;
+    assert weights != null;
     for (int k = 0; k < weights.length; k++) {
       if (0. != weights[k]) {
+        assert kernelSize != null;
         final int ks0 = kernelSize[0];
         final int ks1 = ks0 * kernelSize[1];
         final int ks2 = ks1 * kernelSize[2];
@@ -83,17 +86,20 @@ public final class ConvolveKernel extends Kernel {
         final int x = k2 - o2;
         if (x >= 0 && 0 == x % outputSize[2]) {
           final int i2 = x / outputSize[2];
+          assert inputSize != null;
           if (i2 >= 0 && i2 < inputSize[2]) {
             final int i0 = o0 - k0 + kernelOffset[0];
             final int i1 = o1 - k1 + kernelOffset[1];
             if (i0 >= 0 && i1 >= 0 && i1 < inputSize[1] && i0 < inputSize[0]) {
               final int i11 = i0 + inputSize[0] * (i1 + inputSize[1] * (i2 + inputSize[2] * batch));
+              assert input != null;
               accum += input[i11] * weights[k];
             }
           }
         }
       }
     }
+    assert output != null;
     output[i] = accum;
   }
 
