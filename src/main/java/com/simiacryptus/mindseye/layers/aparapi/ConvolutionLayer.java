@@ -131,22 +131,18 @@ public class ConvolutionLayer extends LayerBase {
     this.paddingY = paddingY;
   }
 
-  @Nonnull
-  public ConvolutionLayer setWeights(@Nonnull final DoubleSupplier f) {
+  public void setWeights(@Nonnull DoubleSupplier f) {
     assert kernel != null;
     kernel.coordStream(true).forEach(c -> {
-      RefUtil.freeRef(kernel.set(c, f.getAsDouble()));
+      kernel.set(c, f.getAsDouble());
     });
-    return this.addRef();
   }
 
-  @Nonnull
-  public ConvolutionLayer setWeights(@Nonnull final ToDoubleFunction<Coordinate> f) {
+  public void setWeights(@Nonnull ToDoubleFunction<Coordinate> f) {
     assert kernel != null;
     kernel.coordStream(true).forEach(c -> {
-      RefUtil.freeRef(kernel.set(c, f.applyAsDouble(c)));
+      kernel.set(c, f.applyAsDouble(c));
     });
-    return this.addRef();
   }
 
   @Nonnull
@@ -162,15 +158,6 @@ public class ConvolutionLayer extends LayerBase {
       return null;
     return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayer::addRef)
         .toArray((x) -> new ConvolutionLayer[x]);
-  }
-
-  @Nullable
-  public static @SuppressWarnings("unused")
-  ConvolutionLayer[][] addRefs(@Nullable ConvolutionLayer[][] array) {
-    if (array == null)
-      return null;
-    return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayer::addRefs)
-        .toArray((x) -> new ConvolutionLayer[x][]);
   }
 
   @Nonnull
@@ -195,11 +182,10 @@ public class ConvolutionLayer extends LayerBase {
       final double[][] inputBuffers = batch.stream().map(x -> {
         @Nullable
         double[] data = x.getData();
-        RefUtil.freeRef(x.detach());
         x.freeRef();
         return data;
       }).toArray(i -> new double[i][]);
-      final double[][] outputBuffers = RefArrays.stream(Tensor.addRefs(output)).map(x -> {
+      final double[][] outputBuffers = RefArrays.stream(RefUtil.addRefs(output)).map(x -> {
         double[] temp_00_0007 = x.getData();
         x.freeRef();
         return temp_00_0007;
@@ -213,7 +199,7 @@ public class ConvolutionLayer extends LayerBase {
       try {
         try {
           try {
-            return new Result(new TensorArray(Tensor.addRefs(output)), new Result.Accumulator() {
+            return new Result(new TensorArray(RefUtil.addRefs(output)), new Result.Accumulator() {
               {
               }
 
@@ -235,14 +221,14 @@ public class ConvolutionLayer extends LayerBase {
 
                   Delta<UUID> temp_00_0013 = buffer.get(convolutionLayer.getId(), kernelData);
                   assert temp_00_0013 != null;
-                  RefUtil.freeRef(temp_00_0013.addInPlace(weightGradient.getData()));
+                  temp_00_0013.addInPlace(weightGradient.getData());
                   temp_00_0013.freeRef();
                   weightGradient.freeRef();
                 }
                 if (input.isAlive()) {
                   final Tensor[] inputBufferTensors = RefIntStream.range(0, outputLength)
                       .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
-                  final double[][] inputBuffers = RefArrays.stream(Tensor.addRefs(inputBufferTensors)).map(x -> {
+                  final double[][] inputBuffers = RefArrays.stream(RefUtil.addRefs(inputBufferTensors)).map(x -> {
                     double[] temp_00_0010 = x.getData();
                     x.freeRef();
                     return temp_00_0010;
@@ -254,7 +240,7 @@ public class ConvolutionLayer extends LayerBase {
                   }).toArray(i -> new double[i][]);
                   convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
                   @Nonnull
-                  TensorArray tensorArray = new TensorArray(Tensor.addRefs(inputBufferTensors));
+                  TensorArray tensorArray = new TensorArray(RefUtil.addRefs(inputBufferTensors));
                   ReferenceCounting.freeRefs(inputBufferTensors);
                   input.accumulate(buffer.addRef(), tensorArray);
                 }
@@ -268,14 +254,18 @@ public class ConvolutionLayer extends LayerBase {
             }) {
 
               {
+                input.addRef();
+              }
+
+              @Override
+              public void _free() {
+                input.freeRef();
+                super._free();
               }
 
               @Override
               public boolean isAlive() {
                 return input.isAlive() || !isFrozen();
-              }
-
-              public void _free() {
               }
             };
           } finally {

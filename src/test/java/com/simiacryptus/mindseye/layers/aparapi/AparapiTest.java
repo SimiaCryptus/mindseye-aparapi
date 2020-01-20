@@ -84,7 +84,6 @@ public class AparapiTest {
       log.info("   MaxWorkItemDimensions : " + bestDevice.getMaxWorkItemDimensions());
       log.info("}");
     }
-
   }
 
   @Test
@@ -136,7 +135,6 @@ public class AparapiTest {
         results[i] += (1 + results[i - 1] + results[i + 1]) * input[i];
       }
     }
-
   }
 
 }

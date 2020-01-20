@@ -23,29 +23,9 @@ import com.simiacryptus.mindseye.lang.Layer;
 import com.simiacryptus.mindseye.layers.java.LayerTestBase;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Random;
 
 public abstract class ConvolutionLayerTest extends LayerTestBase {
-
-  @Nullable
-  public static @SuppressWarnings("unused")
-  ConvolutionLayerTest[] addRefs(@Nullable ConvolutionLayerTest[] array) {
-    if (array == null)
-      return null;
-    return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayerTest::addRef)
-        .toArray((x) -> new ConvolutionLayerTest[x]);
-  }
-
-  @Nullable
-  public static @SuppressWarnings("unused")
-  ConvolutionLayerTest[][] addRefs(@Nullable ConvolutionLayerTest[][] array) {
-    if (array == null)
-      return null;
-    return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayerTest::addRefs)
-        .toArray((x) -> new ConvolutionLayerTest[x][]);
-  }
 
   public @SuppressWarnings("unused")
   void _free() {
@@ -63,19 +43,12 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     private final int inputBands = 1;
     private final int outputBands = 1;
 
-    @Nullable
-    public static @SuppressWarnings("unused")
-    Basic[] addRefs(@Nullable Basic[] array) {
-      if (array == null)
-        return null;
-      return Arrays.stream(array).filter((x) -> x != null).map(Basic::addRef).toArray((x) -> new Basic[x]);
-    }
-
     @Nonnull
     @Override
     public Layer getLayer(final int[][] inputSize, Random random) {
       ConvolutionLayer temp_01_0002 = new ConvolutionLayer(3, 3, inputBands, outputBands, true);
-      ConvolutionLayer temp_01_0001 = temp_01_0002.setWeights(() -> this.random());
+      temp_01_0002.setWeights(() -> this.random());
+      ConvolutionLayer temp_01_0001 = temp_01_0002.addRef();
       temp_01_0002.freeRef();
       return temp_01_0001;
     }
@@ -103,18 +76,9 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     Basic addRef() {
       return (Basic) super.addRef();
     }
-
   }
 
   public static class Downsize extends ConvolutionLayerTest {
-
-    @Nullable
-    public static @SuppressWarnings("unused")
-    Downsize[] addRefs(@Nullable Downsize[] array) {
-      if (array == null)
-        return null;
-      return Arrays.stream(array).filter((x) -> x != null).map(Downsize::addRef).toArray((x) -> new Downsize[x]);
-    }
 
     @Nonnull
     @Override
@@ -126,7 +90,8 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     @Override
     public Layer getLayer(final int[][] inputSize, Random random) {
       ConvolutionLayer temp_01_0004 = new ConvolutionLayer(3, 3, 7, 3, false);
-      ConvolutionLayer temp_01_0003 = temp_01_0004.setWeights(() -> this.random());
+      temp_01_0004.setWeights(() -> this.random());
+      ConvolutionLayer temp_01_0003 = temp_01_0004.addRef();
       temp_01_0004.freeRef();
       return temp_01_0003;
     }
@@ -141,18 +106,9 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     Downsize addRef() {
       return (Downsize) super.addRef();
     }
-
   }
 
   public static class Upsize extends ConvolutionLayerTest {
-
-    @Nullable
-    public static @SuppressWarnings("unused")
-    Upsize[] addRefs(@Nullable Upsize[] array) {
-      if (array == null)
-        return null;
-      return Arrays.stream(array).filter((x) -> x != null).map(Upsize::addRef).toArray((x) -> new Upsize[x]);
-    }
 
     @Nonnull
     @Override
@@ -164,7 +120,8 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     @Override
     public Layer getLayer(final int[][] inputSize, Random random) {
       ConvolutionLayer temp_01_0006 = new ConvolutionLayer(3, 3, 2, 3, false);
-      ConvolutionLayer temp_01_0005 = temp_01_0006.setWeights(() -> this.random());
+      temp_01_0006.setWeights(() -> this.random());
+      ConvolutionLayer temp_01_0005 = temp_01_0006.addRef();
       temp_01_0006.freeRef();
       return temp_01_0005;
     }
@@ -179,6 +136,5 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     Upsize addRef() {
       return (Upsize) super.addRef();
     }
-
   }
 }

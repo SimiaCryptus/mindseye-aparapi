@@ -178,7 +178,6 @@ public final class ConvolutionController {
         throw new ComponentException("Error apply " + this, e);
       }
     });
-
   }
 
   public void convolve(@Nonnull final double[][] input, @Nonnull final double[] weights,
