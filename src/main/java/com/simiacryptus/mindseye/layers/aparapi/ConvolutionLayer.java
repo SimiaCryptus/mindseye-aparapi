@@ -23,7 +23,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.simiacryptus.mindseye.lang.*;
 import com.simiacryptus.ref.lang.RefUtil;
-import com.simiacryptus.ref.lang.ReferenceCounting;
 import com.simiacryptus.ref.wrappers.RefArrays;
 import com.simiacryptus.ref.wrappers.RefIntStream;
 import com.simiacryptus.ref.wrappers.RefList;
@@ -164,7 +163,7 @@ public class ConvolutionLayer extends LayerBase {
   @Override
   public Result eval(@Nonnull final Result... inObj) {
     final Result input = inObj[0].addRef();
-    ReferenceCounting.freeRefs(inObj);
+    RefUtil.freeRefs(inObj);
     final TensorList batch = input.getData();
     Tensor temp_00_0012 = batch.get(0);
     @Nonnull final int[] inputDims = temp_00_0012.getDimensions();
@@ -201,6 +200,9 @@ public class ConvolutionLayer extends LayerBase {
           try {
             return new Result(new TensorArray(RefUtil.addRefs(output)), new Result.Accumulator() {
               {
+                input.addRef();
+                batch.addRef();
+                convolutionLayer.addRef();
               }
 
               @Override
@@ -241,7 +243,7 @@ public class ConvolutionLayer extends LayerBase {
                   convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
                   @Nonnull
                   TensorArray tensorArray = new TensorArray(RefUtil.addRefs(inputBufferTensors));
-                  ReferenceCounting.freeRefs(inputBufferTensors);
+                  RefUtil.freeRefs(inputBufferTensors);
                   input.accumulate(buffer.addRef(), tensorArray);
                 }
                 error.freeRef();
@@ -250,6 +252,10 @@ public class ConvolutionLayer extends LayerBase {
 
               public @SuppressWarnings("unused")
               void _free() {
+                super._free();
+                input.freeRef();
+                batch.freeRef();
+                convolutionLayer.freeRef();
               }
             }) {
 
@@ -269,7 +275,7 @@ public class ConvolutionLayer extends LayerBase {
               }
             };
           } finally {
-            ReferenceCounting.freeRefs(output);
+            RefUtil.freeRefs(output);
           }
         } finally {
           convolutionLayer.freeRef();

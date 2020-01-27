@@ -34,8 +34,7 @@ public final class OpenCL {
     }
 
     public @SuppressWarnings("unused")
-    void _free() {
-    }
+    void _free() { super._free(); }
   };
 
 }
