@@ -76,10 +76,10 @@ public class ConvolutionLayer extends LayerBase {
       temp_00_0001.freeRef();
     JsonElement paddingX = json.get("paddingX");
     if (null != paddingX && paddingX.isJsonPrimitive())
-      this.setPaddingX((paddingX.getAsInt()));
+      this.setPaddingX(paddingX.getAsInt());
     JsonElement paddingY = json.get("paddingY");
     if (null != paddingY && paddingY.isJsonPrimitive())
-      this.setPaddingY((paddingY.getAsInt()));
+      this.setPaddingY(paddingY.getAsInt());
   }
 
   protected ConvolutionLayer(@Nonnull final Tensor kernel, final boolean simple) {
@@ -155,15 +155,15 @@ public class ConvolutionLayer extends LayerBase {
   ConvolutionLayer[] addRefs(@Nullable ConvolutionLayer[] array) {
     if (array == null)
       return null;
-    return Arrays.stream(array).filter((x) -> x != null).map(ConvolutionLayer::addRef)
-        .toArray((x) -> new ConvolutionLayer[x]);
+    return Arrays.stream(array).filter(x -> x != null).map(convolutionLayer -> convolutionLayer.addRef())
+        .toArray(x -> new ConvolutionLayer[x]);
   }
 
   @Nonnull
   @Override
   public Result eval(@Nonnull final Result... inObj) {
     final Result input = inObj[0].addRef();
-    RefUtil.freeRefs(inObj);
+    RefUtil.freeRef(inObj);
     final TensorList batch = input.getData();
     Tensor temp_00_0012 = batch.get(0);
     @Nonnull final int[] inputDims = temp_00_0012.getDimensions();
@@ -243,7 +243,7 @@ public class ConvolutionLayer extends LayerBase {
                   convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
                   @Nonnull
                   TensorArray tensorArray = new TensorArray(RefUtil.addRefs(inputBufferTensors));
-                  RefUtil.freeRefs(inputBufferTensors);
+                  RefUtil.freeRef(inputBufferTensors);
                   input.accumulate(buffer.addRef(), tensorArray);
                 }
                 error.freeRef();
@@ -275,7 +275,7 @@ public class ConvolutionLayer extends LayerBase {
               }
             };
           } finally {
-            RefUtil.freeRefs(output);
+            RefUtil.freeRef(output);
           }
         } finally {
           convolutionLayer.freeRef();
@@ -296,10 +296,10 @@ public class ConvolutionLayer extends LayerBase {
     json.add("filter", kernel.getJson(resources, dataSerializer));
     JsonElement paddingX = json.get("paddingX");
     if (null != paddingX && paddingX.isJsonPrimitive())
-      this.setPaddingX((paddingX.getAsInt()));
+      this.setPaddingX(paddingX.getAsInt());
     JsonElement paddingY = json.get("paddingY");
     if (null != paddingY && paddingY.isJsonPrimitive())
-      this.setPaddingY((paddingY.getAsInt()));
+      this.setPaddingY(paddingY.getAsInt());
     return json;
   }
 

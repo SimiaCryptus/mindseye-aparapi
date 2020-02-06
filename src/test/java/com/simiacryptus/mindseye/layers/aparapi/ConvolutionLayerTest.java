@@ -27,16 +27,6 @@ import java.util.Random;
 
 public abstract class ConvolutionLayerTest extends LayerTestBase {
 
-  public @SuppressWarnings("unused")
-  void _free() { super._free(); }
-
-  @Nonnull
-  public @Override
-  @SuppressWarnings("unused")
-  ConvolutionLayerTest addRef() {
-    return (ConvolutionLayerTest) super.addRef();
-  }
-
   public static class Basic extends ConvolutionLayerTest {
 
     private final int inputBands = 1;
@@ -65,15 +55,6 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
       return new int[][]{{200, 200, inputBands}};
     }
 
-    public @SuppressWarnings("unused")
-    void _free() { super._free(); }
-
-    @Nonnull
-    public @Override
-    @SuppressWarnings("unused")
-    Basic addRef() {
-      return (Basic) super.addRef();
-    }
   }
 
   public static class Downsize extends ConvolutionLayerTest {
@@ -94,15 +75,6 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
       return temp_01_0003;
     }
 
-    public @SuppressWarnings("unused")
-    void _free() { super._free(); }
-
-    @Nonnull
-    public @Override
-    @SuppressWarnings("unused")
-    Downsize addRef() {
-      return (Downsize) super.addRef();
-    }
   }
 
   public static class Upsize extends ConvolutionLayerTest {
@@ -123,14 +95,5 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
       return temp_01_0005;
     }
 
-    public @SuppressWarnings("unused")
-    void _free() { super._free(); }
-
-    @Nonnull
-    public @Override
-    @SuppressWarnings("unused")
-    Upsize addRef() {
-      return (Upsize) super.addRef();
-    }
   }
 }
