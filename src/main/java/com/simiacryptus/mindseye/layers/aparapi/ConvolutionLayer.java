@@ -29,7 +29,6 @@ import com.simiacryptus.ref.wrappers.RefList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.DoubleSupplier;
@@ -150,15 +149,6 @@ public class ConvolutionLayer extends LayerBase {
     return new ConvolutionLayer(json, rs);
   }
 
-  @Nullable
-  public static @SuppressWarnings("unused")
-  ConvolutionLayer[] addRefs(@Nullable ConvolutionLayer[] array) {
-    if (array == null)
-      return null;
-    return Arrays.stream(array).filter(x -> x != null).map(convolutionLayer -> convolutionLayer.addRef())
-        .toArray(x -> new ConvolutionLayer[x]);
-  }
-
   @Nonnull
   @Override
   public Result eval(@Nonnull final Result... inObj) {
@@ -194,98 +184,10 @@ public class ConvolutionLayer extends LayerBase {
       throw new RuntimeException("Error mapCoords png res " + RefArrays.toString(inputDims), e);
     }
     int outputLength = output.length;
-    try {
-      try {
-        try {
-          try {
-            return new Result(new TensorArray(RefUtil.addRefs(output)), new Result.Accumulator() {
-              {
-                input.addRef();
-                batch.addRef();
-                convolutionLayer.addRef();
-              }
-
-              @Override
-              public void accept(@Nonnull DeltaSet<UUID> buffer, @Nonnull TensorList error) {
-                if (!ConvolutionLayer.this.isFrozen()) {
-                  final double[][] inputBuffers = batch.stream().map(x -> {
-                    double[] temp_00_0008 = x.getData();
-                    x.freeRef();
-                    return temp_00_0008;
-                  }).toArray(i -> new double[i][]);
-                  final double[][] outputBuffers = error.stream().map(x -> {
-                    double[] temp_00_0009 = x.getData();
-                    x.freeRef();
-                    return temp_00_0009;
-                  }).toArray(i -> new double[i][]);
-                  @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
-                  convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
-
-                  Delta<UUID> temp_00_0013 = buffer.get(convolutionLayer.getId(), kernelData);
-                  assert temp_00_0013 != null;
-                  temp_00_0013.addInPlace(weightGradient.getData());
-                  temp_00_0013.freeRef();
-                  weightGradient.freeRef();
-                }
-                if (input.isAlive()) {
-                  final Tensor[] inputBufferTensors = RefIntStream.range(0, outputLength)
-                      .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
-                  final double[][] inputBuffers = RefArrays.stream(RefUtil.addRefs(inputBufferTensors)).map(x -> {
-                    double[] temp_00_0010 = x.getData();
-                    x.freeRef();
-                    return temp_00_0010;
-                  }).toArray(i -> new double[i][]);
-                  final double[][] outputBuffers = error.stream().map(x -> {
-                    double[] temp_00_0011 = x.getData();
-                    x.freeRef();
-                    return temp_00_0011;
-                  }).toArray(i -> new double[i][]);
-                  convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
-                  @Nonnull
-                  TensorArray tensorArray = new TensorArray(RefUtil.addRefs(inputBufferTensors));
-                  RefUtil.freeRef(inputBufferTensors);
-                  input.accumulate(buffer.addRef(), tensorArray);
-                }
-                error.freeRef();
-                buffer.freeRef();
-              }
-
-              public @SuppressWarnings("unused")
-              void _free() {
-                super._free();
-                input.freeRef();
-                batch.freeRef();
-                convolutionLayer.freeRef();
-              }
-            }) {
-
-              {
-                input.addRef();
-              }
-
-              @Override
-              public void _free() {
-                input.freeRef();
-                super._free();
-              }
-
-              @Override
-              public boolean isAlive() {
-                return input.isAlive() || !isFrozen();
-              }
-            };
-          } finally {
-            RefUtil.freeRef(output);
-          }
-        } finally {
-          convolutionLayer.freeRef();
-        }
-      } finally {
-        batch.freeRef();
-      }
-    } finally {
-      input.freeRef();
-    }
+    boolean alive = input.isAlive();
+    Accumulator accumulator = new Accumulator(batch, kernelDims, convolutionController, convolutionLayer, kernelData, outputLength, inputDims, input.getAccumulator(), input.isAlive());
+    input.freeRef();
+    return new Result(new TensorArray(output), accumulator, alive || !isFrozen());
   }
 
   @Nonnull
@@ -321,5 +223,88 @@ public class ConvolutionLayer extends LayerBase {
   @SuppressWarnings("unused")
   ConvolutionLayer addRef() {
     return (ConvolutionLayer) super.addRef();
+  }
+
+  private class Accumulator extends Result.Accumulator {
+
+    private final TensorList batch;
+    private final int[] kernelDims;
+    private final ConvolutionController convolutionController;
+    private final ConvolutionLayer convolutionLayer;
+    private final double[] kernelData;
+    private final int outputLength;
+    private final int[] inputDims;
+    private Result.Accumulator accumulator;
+    private boolean alive;
+
+    public Accumulator(TensorList batch, int[] kernelDims, ConvolutionController convolutionController, ConvolutionLayer convolutionLayer, double[] kernelData, int outputLength, int[] inputDims, Result.Accumulator accumulator, boolean alive) {
+      this.batch = batch;
+      this.kernelDims = kernelDims;
+      this.convolutionController = convolutionController;
+      this.convolutionLayer = convolutionLayer;
+      this.kernelData = kernelData;
+      this.outputLength = outputLength;
+      this.inputDims = inputDims;
+      this.accumulator = accumulator;
+      this.alive = alive;
+    }
+
+    @Override
+    public void accept(@Nonnull DeltaSet<UUID> buffer, @Nonnull TensorList error) {
+      if (!ConvolutionLayer.this.isFrozen()) {
+        final double[][] inputBuffers = batch.stream().map(x -> {
+          double[] temp_00_0008 = x.getData();
+          x.freeRef();
+          return temp_00_0008;
+        }).toArray(i -> new double[i][]);
+        final double[][] outputBuffers = error.stream().map(x -> {
+          double[] temp_00_0009 = x.getData();
+          x.freeRef();
+          return temp_00_0009;
+        }).toArray(i -> new double[i][]);
+        @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
+        convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
+
+        Delta<UUID> temp_00_0013 = buffer.get(convolutionLayer.getId(), kernelData);
+        assert temp_00_0013 != null;
+        temp_00_0013.addInPlace(weightGradient.getData());
+        temp_00_0013.freeRef();
+        weightGradient.freeRef();
+      }
+      if (alive) {
+        final Tensor[] inputBufferTensors = RefIntStream.range(0, outputLength)
+            .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
+        final double[][] inputBuffers = RefArrays.stream(RefUtil.addRefs(inputBufferTensors)).map(x -> {
+          double[] temp_00_0010 = x.getData();
+          x.freeRef();
+          return temp_00_0010;
+        }).toArray(i -> new double[i][]);
+        final double[][] outputBuffers = error.stream().map(x -> {
+          double[] temp_00_0011 = x.getData();
+          x.freeRef();
+          return temp_00_0011;
+        }).toArray(i -> new double[i][]);
+        convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
+        @Nonnull
+        TensorArray tensorArray = new TensorArray(RefUtil.addRefs(inputBufferTensors));
+        RefUtil.freeRef(inputBufferTensors);
+        Result.Accumulator accumulator = this.accumulator;
+        try {
+          accumulator.accept(buffer.addRef(), tensorArray);
+        } finally {
+          accumulator.freeRef();
+        }
+      }
+      error.freeRef();
+      buffer.freeRef();
+    }
+
+    public @SuppressWarnings("unused")
+    void _free() {
+      super._free();
+      accumulator.freeRef();
+      batch.freeRef();
+      convolutionLayer.freeRef();
+    }
   }
 }

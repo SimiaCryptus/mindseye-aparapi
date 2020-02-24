@@ -20,7 +20,7 @@
 package com.simiacryptus.mindseye.layers.aparapi;
 
 import com.simiacryptus.mindseye.lang.Layer;
-import com.simiacryptus.mindseye.layers.java.LayerTestBase;
+import com.simiacryptus.mindseye.test.LayerTestBase;
 
 import javax.annotation.Nonnull;
 import java.util.Random;

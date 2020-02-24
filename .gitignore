@@ -1,3 +1,6 @@
 .idea/
 mindseye-aparapi.iml
 target/
+*.hprof
+reports/
+logs/
