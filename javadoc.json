@@ -1,14 +1,15 @@
 {
-  "com.simiacryptus.mindseye.layers.aparapi.BackpropKernel": {},
-  "com.simiacryptus.mindseye.layers.aparapi.OpenCL": {},
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest": {},
-  "com.simiacryptus.mindseye.layers.aparapi.GradientKernel": {},
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Downsize": {},
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayer": {},
-  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest.TestKernel": {},
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolveKernel": {},
-  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest": {},
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionController": {},
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Upsize": {},
-  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Basic": {}
+  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.AparapiTest.TestKernel" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.BackpropKernel" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionController" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayer" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayer.Accumulator" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Basic" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Downsize" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Upsize" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.ConvolveKernel" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.GradientKernel" : { },
+  "com.simiacryptus.mindseye.layers.aparapi.OpenCL" : { }
 }

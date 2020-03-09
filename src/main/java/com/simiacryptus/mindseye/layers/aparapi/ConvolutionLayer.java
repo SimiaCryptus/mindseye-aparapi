@@ -162,7 +162,6 @@ public class ConvolutionLayer extends LayerBase {
     @Nonnull final int[] kernelDims = kernel.getDimensions();
     final ConvolutionLayer convolutionLayer = ConvolutionLayer.this.addRef();
     assert convolutionLayer.kernel != null;
-    @Nullable final double[] kernelData = convolutionLayer.kernel.getData();
     @Nonnull final ConvolutionController convolutionController = new ConvolutionController(inputDims, kernelDims, paddingX,
         paddingY);
     final Tensor[] output = RefIntStream.range(0, batch.length())
@@ -174,18 +173,18 @@ public class ConvolutionLayer extends LayerBase {
         x.freeRef();
         return data;
       }).toArray(i -> new double[i][]);
-      final double[][] outputBuffers = RefArrays.stream(RefUtil.addRefs(output)).map(x -> {
+      final double[][] outputBuffers = RefArrays.stream(RefUtil.addRef(output)).map(x -> {
         double[] temp_00_0007 = x.getData();
         x.freeRef();
         return temp_00_0007;
       }).toArray(i -> new double[i][]);
-      convolutionController.convolve(inputBuffers, kernelData, outputBuffers);
+      convolutionController.convolve(inputBuffers, convolutionLayer.kernel.getData(), outputBuffers);
     } catch (@Nonnull final Throwable e) {
       throw new RuntimeException("Error mapCoords png res " + RefArrays.toString(inputDims), e);
     }
     int outputLength = output.length;
     boolean alive = input.isAlive();
-    Accumulator accumulator = new Accumulator(batch, kernelDims, convolutionController, convolutionLayer, kernelData, outputLength, inputDims, input.getAccumulator(), input.isAlive());
+    Accumulator accumulator = new Accumulator(batch, kernelDims, convolutionController, convolutionLayer, outputLength, inputDims, input.getAccumulator(), input.isAlive());
     input.freeRef();
     return new Result(new TensorArray(output), accumulator, alive || !isFrozen());
   }
@@ -231,18 +230,16 @@ public class ConvolutionLayer extends LayerBase {
     private final int[] kernelDims;
     private final ConvolutionController convolutionController;
     private final ConvolutionLayer convolutionLayer;
-    private final double[] kernelData;
     private final int outputLength;
     private final int[] inputDims;
     private Result.Accumulator accumulator;
     private boolean alive;
 
-    public Accumulator(TensorList batch, int[] kernelDims, ConvolutionController convolutionController, ConvolutionLayer convolutionLayer, double[] kernelData, int outputLength, int[] inputDims, Result.Accumulator accumulator, boolean alive) {
+    public Accumulator(TensorList batch, int[] kernelDims, ConvolutionController convolutionController, ConvolutionLayer convolutionLayer, int outputLength, int[] inputDims, Result.Accumulator accumulator, boolean alive) {
       this.batch = batch;
       this.kernelDims = kernelDims;
       this.convolutionController = convolutionController;
       this.convolutionLayer = convolutionLayer;
-      this.kernelData = kernelData;
       this.outputLength = outputLength;
       this.inputDims = inputDims;
       this.accumulator = accumulator;
@@ -265,16 +262,15 @@ public class ConvolutionLayer extends LayerBase {
         @Nonnull final Tensor weightGradient = new Tensor(kernelDims);
         convolutionController.gradient(inputBuffers, weightGradient.getData(), outputBuffers);
 
-        Delta<UUID> temp_00_0013 = buffer.get(convolutionLayer.getId(), kernelData);
-        assert temp_00_0013 != null;
-        temp_00_0013.addInPlace(weightGradient.getData());
-        temp_00_0013.freeRef();
-        weightGradient.freeRef();
+        Delta<UUID> kernelDelta = buffer.get(convolutionLayer.getId(), convolutionLayer.kernel.addRef());
+        assert kernelDelta != null;
+        kernelDelta.addInPlace(weightGradient);
+        kernelDelta.freeRef();
       }
       if (alive) {
         final Tensor[] inputBufferTensors = RefIntStream.range(0, outputLength)
             .mapToObj(dataIndex -> new Tensor(inputDims)).toArray(i -> new Tensor[i]);
-        final double[][] inputBuffers = RefArrays.stream(RefUtil.addRefs(inputBufferTensors)).map(x -> {
+        final double[][] inputBuffers = RefArrays.stream(RefUtil.addRef(inputBufferTensors)).map(x -> {
           double[] temp_00_0010 = x.getData();
           x.freeRef();
           return temp_00_0010;
@@ -284,10 +280,9 @@ public class ConvolutionLayer extends LayerBase {
           x.freeRef();
           return temp_00_0011;
         }).toArray(i -> new double[i][]);
-        convolutionController.backprop(inputBuffers, kernelData, outputBuffers);
+        convolutionController.backprop(inputBuffers, convolutionLayer.kernel.getData(), outputBuffers);
         @Nonnull
-        TensorArray tensorArray = new TensorArray(RefUtil.addRefs(inputBufferTensors));
-        RefUtil.freeRef(inputBufferTensors);
+        TensorArray tensorArray = new TensorArray(inputBufferTensors);
         Result.Accumulator accumulator = this.accumulator;
         try {
           accumulator.accept(buffer.addRef(), tensorArray);
