@@ -92,7 +92,7 @@ public class AparapiTest {
 
     @Nonnull final OpenCLDevice openclDevice = (OpenCLDevice) Device.best();
     // final Convolution convolution = openclDevice.bind(Convolution.class);
-    @Nonnull final AparapiTest.TestKernel testKernel = new AparapiTest.TestKernel();
+    final AparapiTest.TestKernel testKernel = new AparapiTest.TestKernel();
     testKernel.setExecutionMode(EXECUTION_MODE.GPU);
     testKernel.setExplicit(true);
     final Range range = openclDevice.createRange3D(100, 100, 8);

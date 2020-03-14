@@ -114,7 +114,6 @@ public class ConvolutionLayer extends LayerBase {
     return paddingX;
   }
 
-  @Nonnull
   public void setPaddingX(Integer paddingX) {
     this.paddingX = paddingX;
   }
@@ -124,7 +123,6 @@ public class ConvolutionLayer extends LayerBase {
     return paddingY;
   }
 
-  @Nonnull
   public void setPaddingY(Integer paddingY) {
     this.paddingY = paddingY;
   }
