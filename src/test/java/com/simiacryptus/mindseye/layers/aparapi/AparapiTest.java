@@ -87,7 +87,7 @@ public class AparapiTest {
   }
 
   @Test
-  //@Ignore
+  //@Disabled
   public void test1() {
 
     @Nonnull final OpenCLDevice openclDevice = (OpenCLDevice) Device.best();
