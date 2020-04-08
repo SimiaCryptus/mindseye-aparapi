@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.simiacryptus</groupId>
         <artifactId>java-parent</artifactId>
-        <version>2.0.0</version>
+        <version>MINDSEYE-SNAPSHOT</version>
         <relativePath>../../mvn-parents/java-parent</relativePath>
     </parent>
 
@@ -41,12 +41,6 @@
         <github.global.userName></github.global.userName>
         <github.global.oauth2Token></github.global.oauth2Token>
     </properties>
-    <distributionManagement>
-        <site>
-            <id>github</id>
-            <url>https://simiacryptus.github.io/mindseye-aparapi</url>
-        </site>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
