@@ -22,7 +22,6 @@ package com.simiacryptus.mindseye.test;
 import com.simiacryptus.aws.exe.EC2NodeSettings;
 import com.simiacryptus.aws.exe.EC2NotebookRunner;
 import com.simiacryptus.util.test.MacroTestRunner;
-import com.simiacryptus.util.test.MacroTestRunner.Isolation;
 
 public class RemoteTests_Aparapi {
 
