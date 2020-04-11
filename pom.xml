@@ -37,7 +37,6 @@
     </scm>
 
     <properties>
-        <github.project>mindseye-aparapi</github.project>
         <github.global.userName></github.global.userName>
         <github.global.oauth2Token></github.global.oauth2Token>
     </properties>
