@@ -18,11 +18,11 @@
   -->
 
 <project name="MindsEye">
-    <skin>
+    <!--<skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
-        <version>1.6</version>
-    </skin>
+        <version>1.8</version>
+    </skin>-->
     <custom>
         <fluidoSkin>
             <topBarEnabled>true</topBarEnabled>
@@ -39,11 +39,11 @@
     <body>
         <menu ref="reports"/>
         <menu name="Documentation">
-            <item name="Components" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
+            <!--<item name="Components" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
             <item name="Optimizers" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
             <item name="Training" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
             <item name="Datasets" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
-            <item name="Models" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
+            <item name="Models" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>-->
         </menu>
         <menu name="Simia Cryptus" position="right">
             <item name="Blog" href="http://simiacryptus.com"/>
