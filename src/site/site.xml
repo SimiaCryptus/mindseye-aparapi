@@ -48,7 +48,7 @@
         <menu name="Simia Cryptus" position="right">
             <item name="Blog" href="http://simiacryptus.com"/>
             <item name="GitHub" href="https://github.com/SimiaCryptus/"/>
-            <item name="Modules" href="https://simiacryptus.github.io/utilities/all"/>
+            <item name="Modules" href="http://simiacryptus.s3.us-west-2.amazonaws.com/release/2.0.0/all-projects/index.html"/>
             <item name="Maven" href="https://mvnrepository.com/artifact/com.simiacryptus"/>
         </menu>
 

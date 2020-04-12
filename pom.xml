@@ -30,7 +30,7 @@
 
     <artifactId>mindseye-aparapi</artifactId>
     <description>OpenCL Neural Network Components Implemented Using Aparapi</description>
-    <url>https://simiacryptus.github.io/${github.project}/</url>
+
     <scm>
         <url>https://github.com/SimiaCryptus/mindseye-aparapi/</url>
         <connection>scm:git:git@github.com:SimiaCryptus/MindsEye.git</connection>
