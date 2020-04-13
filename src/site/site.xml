@@ -17,7 +17,7 @@
   ~ under the License.
   -->
 
-<project name="MindsEye">
+<project name="mindseye-aparapi">
     <!--<skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
@@ -38,13 +38,6 @@
     </custom>
     <body>
         <menu ref="reports"/>
-        <menu name="Documentation">
-            <!--<item name="Components" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
-            <item name="Optimizers" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
-            <item name="Training" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
-            <item name="Datasets" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>
-            <item name="Models" href="https://simiacryptus.github.io/NetworkZoo/reports/index.html"/>-->
-        </menu>
         <menu name="Simia Cryptus" position="right">
             <item name="Blog" href="http://simiacryptus.com"/>
             <item name="GitHub" href="https://github.com/SimiaCryptus/"/>
@@ -52,20 +45,7 @@
             <item name="Maven" href="https://mvnrepository.com/artifact/com.simiacryptus"/>
         </menu>
 
-        <footer><![CDATA[
-    	<p>Search <a href="http://simiacryptus.com">SimiaCryptus Software</a>:</p>
-    	<script>
-  (function() {
-    var cx = '002356377723513062632:sj7pd32nzsk';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
-<gcse:search></gcse:search>]]></footer>
+        <footer></footer>
 
     </body>
 </project>
