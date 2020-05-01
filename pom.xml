@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   ~ Copyright (c) 2019 by Andrew Charneski.
   ~
@@ -16,7 +17,6 @@
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
-
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -37,16 +37,19 @@
     </scm>
 
     <properties>
-        <github.global.userName></github.global.userName>
-        <github.global.oauth2Token></github.global.oauth2Token>
+        <github.global.userName/>
+        <github.global.oauth2Token/>
     </properties>
+
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.simiacryptus</groupId>
-                <artifactId>java-parent</artifactId>
-                <version>${project.parent.version}</version>
+                <artifactId>bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -57,17 +60,28 @@
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>mindseye-java</artifactId>
-            <version>${project.version}</version>
+
         </dependency>
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>mindseye-test</artifactId>
-            <version>${project.version}</version>
+
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
+
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -93,12 +107,12 @@
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>java-util</artifactId>
-            <version>${project.version}</version>
+
         </dependency>
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>mindseye-core</artifactId>
-            <version>${project.version}</version>
+
         </dependency>
         <dependency>
             <groupId>com.aparapi</groupId>
@@ -107,8 +121,14 @@
         <dependency>
             <groupId>com.simiacryptus</groupId>
             <artifactId>refcount-core</artifactId>
-            <version>${project.version}</version>
+
         </dependency>
     </dependencies>
 
+    <url>http://code.simiacrypt.us/release/${project.version}/mindseye-aparapi</url>
+    <distributionManagement>
+        <site>
+            <url>s3://code.simiacrypt.us/release/${project.version}/mindseye-aparapi</url>
+        </site>
+    </distributionManagement>
 </project>

@@ -11,5 +11,5 @@
   "com.simiacryptus.mindseye.layers.aparapi.ConvolutionLayerTest.Upsize" : { },
   "com.simiacryptus.mindseye.layers.aparapi.ConvolveKernel" : { },
   "com.simiacryptus.mindseye.layers.aparapi.GradientKernel" : { },
-  "com.simiacryptus.mindseye.layers.aparapi.OpenCL" : { }
+  "com.simiacryptus.mindseye.test.RemoteTests_Aparapi" : { }
 }

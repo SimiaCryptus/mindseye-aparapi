@@ -34,18 +34,15 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     @Nonnull
     @Override
     public int[][] getLargeDims() {
-
       return new int[][]{{200, 200, inputBands}};
     }
 
     @Nonnull
     @Override
     public Layer getLayer() {
-      ConvolutionLayer temp_01_0002 = new ConvolutionLayer(3, 3, inputBands, outputBands, true);
-      temp_01_0002.setWeights(() -> this.random());
-      ConvolutionLayer temp_01_0001 = temp_01_0002.addRef();
-      temp_01_0002.freeRef();
-      return temp_01_0001;
+      ConvolutionLayer convolutionLayer = new ConvolutionLayer(3, 3, inputBands, outputBands, true);
+      convolutionLayer.setWeights(() -> this.random());
+      return convolutionLayer;
     }
 
     @Nonnull
@@ -61,11 +58,9 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     @Nonnull
     @Override
     public Layer getLayer() {
-      ConvolutionLayer temp_01_0004 = new ConvolutionLayer(3, 3, 7, 3, false);
-      temp_01_0004.setWeights(() -> this.random());
-      ConvolutionLayer temp_01_0003 = temp_01_0004.addRef();
-      temp_01_0004.freeRef();
-      return temp_01_0003;
+      ConvolutionLayer convolutionLayer = new ConvolutionLayer(3, 3, 7, 3, false);
+      convolutionLayer.setWeights(() -> this.random());
+      return convolutionLayer;
     }
 
     @Nonnull
@@ -81,11 +76,9 @@ public abstract class ConvolutionLayerTest extends LayerTestBase {
     @Nonnull
     @Override
     public Layer getLayer() {
-      ConvolutionLayer temp_01_0006 = new ConvolutionLayer(3, 3, 2, 3, false);
-      temp_01_0006.setWeights(() -> this.random());
-      ConvolutionLayer temp_01_0005 = temp_01_0006.addRef();
-      temp_01_0006.freeRef();
-      return temp_01_0005;
+      ConvolutionLayer convolutionLayer = new ConvolutionLayer(3, 3, 2, 3, false);
+      convolutionLayer.setWeights(() -> this.random());
+      return convolutionLayer;
     }
 
     @Nonnull
