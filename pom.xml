@@ -23,9 +23,8 @@
 
     <parent>
         <groupId>com.simiacryptus</groupId>
-        <artifactId>java-parent</artifactId>
+        <artifactId>mindseye</artifactId>
         <version>MINDSEYE-SNAPSHOT</version>
-        <relativePath>../../mvn-parents/java-parent</relativePath>
     </parent>
 
     <artifactId>mindseye-aparapi</artifactId>
