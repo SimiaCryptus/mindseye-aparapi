@@ -1,4 +1,5 @@
 *.hprof
+*.pem
 .idea/
 logs/
 mindseye-aparapi.iml
